@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Demystifying Event Sourcing | A Tech Lead&#39;s diary</title>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
+<meta name="viewport" content="width=device-width,minimum-scale=1">
+<meta name="description" content="Research - Demystifying Event Sourcing 🔗Preface 🔗There are a lot of articles about event sourcing. Despite of all the opinions on the intenet, this article focuses on fact through a form of research to explore what event sourcing is, where it came from and what can we do with it. Armed with these fact, we should be able to make some logical assumpltions.
+Definition 🔗Martin fowler first mentioned the concept of Event Sourcing in his article back in December 2005 where he explained event sourcing as">
+<meta name="generator" content="Hugo 0.72.0" />
+
+
+  <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+
+
+
+
+
+
+
+
+  </head>
+
+  <body>
+    <nav class="navigation">
+	
+		<a href="/"> <span class="arrow">←</span>Home</a>
+	
+	<a href="/posts">Archive</a>
+	<a href="/tags">Tags</a>
+	<a href="/about">About</a>
+
+	
+
+	
+</nav>
+
+
+    <main class="main">
+      
+
+<section id="single">
+    <h1 class="title">Demystifying Event Sourcing</h1>
+
+    <div class="tip">
+        <span>
+          Jun 30, 2021 23:17
+        </span>
+        <span class="split">
+          ·
+        </span>
+        <span>
+          
+            1007 words
+          
+        </span>
+        <span class="split">
+          ·
+        </span>
+        <span>
+          5 minute read
+        </span>
+    </div>
+
+    <div class="content">
+      <h1 id="research---demystifying-event-sourcing">Research - Demystifying Event Sourcing <a href="#research---demystifying-event-sourcing" class="anchor">🔗</a></h1><h2 id="preface">Preface <a href="#preface" class="anchor">🔗</a></h2><p>There are a lot of articles about event sourcing. Despite of all the opinions on the intenet, this article focuses on fact through a form of research to explore what event sourcing is, where it came from and what can we do with it. Armed with these fact, we should be able to make some logical assumpltions.</p>
+<h2 id="definition">Definition <a href="#definition" class="anchor">🔗</a></h2><p>Martin fowler first mentioned the concept of Event Sourcing in his article back in December 2005 where he explained event sourcing as</p>
+<pre><code>&quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events.&quot; - Martin Fowler 2005
+</code></pre>
+<p>One of the earliest explanations of Event Sourcing from Greg Young, the creator of CQRS, talked about his event sourced system at QCon SF 2007</p>
+<pre><code>&quot;make objects responsible for tracking our in-state changes&quot; - Greg Young 2007
+</code></pre>
+<p>In the following years, Greg Young gave numerous talks about Event Sourcing and CQRS. in 2014, Greg Young talked about Event Sourcing at the GOTO conference with the definition</p>
+<pre><code>&quot;Event Sourcing says all state is transient and you only store facts.&quot; Greg Young 2014
+</code></pre>
+<p>While Event Sourcing became more popular in the software development in the 2010s, we started to see more and more blog posts writing about event sourcing, even in those big technology firms, including</p>
+<pre><code>&quot;Instead of storing just the current state of the data in a domain, use an append-only store to record the full series of actions taken on that data.&quot; - Microsoft Docs (https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
+</code></pre>
+<p>AxonIQ is arguablly the most established framework for Event Sourcing and CQRS, you can also find an explaination of Event Sourcing on its website:</p>
+<pre><code>&quot;Event Sourcing is a pattern for data storage, where instead of storing the current state of any entity, all past changes to that state are stored.&quot; - AxonIQ (https://axoniq.io/resources/event-sourcing)
+</code></pre>
+<p>One common misconceptions is that Event Sourcing is associated with an Event Streaming or Event Driven Architecture. There are certainly many things you can achieve with Event Sourcing. Nevertheless, conceptually, Event Sourcing is no more than a pattern to store your data in a form of a serials of events. This can be an alternative model to the common CRUD object state management.</p>
+<h3 id="command-sourcing-vs-event-sourcing">Command Sourcing vs Event Sourcing <a href="#command-sourcing-vs-event-sourcing" class="anchor">🔗</a></h3><p>what is command sourcing and how it is different from event sourcing.</p>
+<h2 id="inspiration">Inspiration <a href="#inspiration" class="anchor">🔗</a></h2><h3 id="event-sourcing-in-real-life">Event Sourcing in real life <a href="#event-sourcing-in-real-life" class="anchor">🔗</a></h3><p>Event Sourcing in real life can be traced all the way back to the Mesopotamia Sumer (Young 2014). The prime example of Event Sourcing is a double-entry accounting ledger where the ledger entrys are a log of all of the events that change the value of an Account, so that an Account is itself an example of Event Sourcin (Fowler 2004). Other examples of event sourcing mentioned by Greg Young include how lawyers add addendum to the contracts and how doctors appending records to files, etc (Young 2014)</p>
+<p>As it can be seen that Event Sourcing is inspired by real life examples. There isn&rsquo;t any official publications when and who invented this concept at the first place. it is reasonable to assume Luca Pacioli, a friend of Leonardo da Vinci, who published Summa de Arithmetica(<a href="https://en.wikipedia.org/wiki/Summa_de_arithmetica">https://en.wikipedia.org/wiki/Summa_de_arithmetica</a>) in which described the concept of double-entry bookkeeping in 1494 was one the first people who invented the idea of event sourcing.</p>
+<h3 id="event-sourcing-and-functional-programming">Event Sourcing and Functional Programming <a href="#event-sourcing-and-functional-programming" class="anchor">🔗</a></h3><p>Bob Martin also wrote about the Event Sourcing in the Functional Programming Chaper of his book Clean Architecture where he discribed how event sourcing enforces immutable data which eliminates the challenges from concurrency and race conditions.</p>
+<h2 id="misconceptions">Misconceptions <a href="#misconceptions" class="anchor">🔗</a></h2><p>Now we understand what Event Sourcing really is about, let&rsquo;s take a look at some common misconceptions about Event Sourcing.</p>
+<h3 id="git-is-built-with-event-sourcing-fowler-2004">Git is built with Event Sourcing (Fowler 2004) <a href="#git-is-built-with-event-sourcing-fowler-2004" class="anchor">🔗</a></h3><p>Martin Fowler in his Event Sourcing article mentioned that a version control systems like git is an implementation of Event Sourcing. This statement is not technically correct. In fact, Git uses snapshotting technique on <code>git commit</code> and the <code>git diff</code> simply compare 2 snapshots(git trees) and calculate the difference on demand ((<a href="https://git-scm.com/book/en/v2/Appendix-C%3A-Git-Commands-Basic-Snapshotting))">https://git-scm.com/book/en/v2/Appendix-C%3A-Git-Commands-Basic-Snapshotting))</a>. Although the technique of snapshotting is commonly used with Event Sourcing to reduce the number of in memory calculation of a large amount of event history (Fowler 2005), Git as an example of Event Sourcing is technically incorrect.</p>
+<h3 id="event-sourcing-needs-an-event-bus">Event Sourcing needs an event bus <a href="#event-sourcing-needs-an-event-bus" class="anchor">🔗</a></h3><p>Although this Confluet article demonstrates a great solution design where Kafka can be leveraged as a persistent event store, event bus is not a default solution for implementing Event Sourcing. Greg Young emphasized that a database is also a event queue. What Event Sourcing really needs is a persistent event store, regardless its form.</p>
+<h3 id="event-sourcing-is-not-enterprisey">Event Sourcing is not enterprisey <a href="#event-sourcing-is-not-enterprisey" class="anchor">🔗</a></h3><p>Despite the fact that enterprisey sounds like a inresponsible</p>
+<h3 id="event-sourcing-needs-to-be-used-with-cqrs">Event Sourcing needs to be used with CQRS <a href="#event-sourcing-needs-to-be-used-with-cqrs" class="anchor">🔗</a></h3><p>Event Sourcing and CQRS are 2 very different concepts althought CQRS is often applied to an Event Sourced system to provide the query capability. Either technique can be applied individually.</p>
+<h3 id="event-sourcing-is-hard">Event Sourcing is hard <a href="#event-sourcing-is-hard" class="anchor">🔗</a></h3><p>Multiple people have indicated that the total effort it requires to implement an Event Sourcing solution and a typical CRUD solution reuqires roughly the same amount of work. Latter may get up and running quicker, but Event Sourcing requires less work in a long run.</p>
+<h2 id="the-benifits-for-event-sourcing">The benifits for Event Sourcing <a href="#the-benifits-for-event-sourcing" class="anchor">🔗</a></h2><h3 id="the-general-benifits">The general benifits <a href="#the-general-benifits" class="anchor">🔗</a></h3><h3 id="the-overlooked-benifits">The overlooked benifits <a href="#the-overlooked-benifits" class="anchor">🔗</a></h3><p>&ldquo;avoid having to use a 2pc transaction between the data model and the message queue&rdquo; - Young</p>
+<p>&ldquo;Testing with the events that actually happens&rdquo; - Young</p>
+<p>&ldquo;visualise concurrency violation&rdquo; - Young</p>
+<p>&ldquo;performance benifits due to only one disk write for both your storage and your durable queue&rdquo; - Young</p>
+<h2 id="the-biggest-challenge-of-event-sourcing">The biggest challenge of Event Sourcing <a href="#the-biggest-challenge-of-event-sourcing" class="anchor">🔗</a></h2><h2 id="tradeoff">Tradeoff <a href="#tradeoff" class="anchor">🔗</a></h2><h2 id="everthing-else">everthing else <a href="#everthing-else" class="anchor">🔗</a></h2><p>Command Sourcing vs Event Sourcing</p>
+<ul>
+<li>State from event</li>
+<li>State as event</li>
+</ul>
+<p>SQL Migration script</p>
+<p>&ldquo;accountants dont work in pencils, they work in pen&rdquo;</p>
+<p>&ldquo;used for smoke test when pushing new features&rdquo;</p>
+<p>&ldquo;prevent super user attack&rdquo;</p>
+<p>&ldquo;lawyer adding addendum&rdquo;</p>
+<p>&ldquo;doctors append thing to file&rdquo;</p>
+<p>&ldquo;Event Sourcing is the only way to guarantee you event logs in distributed architecture&rdquo;</p>
+<p>&ldquo;database commit log is a usecase of event sourcing&rdquo;</p>
+<h2 id="issues">issues <a href="#issues" class="anchor">🔗</a></h2><p>Versioning</p>
+<p>People</p>
+
+    </div>
+
+    
+    
+    
+
+</section>
+
+
+    </main>
+    
+    <footer id="footer">
+    
+
+    <p class="copyright">
+    
+       © Copyright 
+       2021 
+       <span class="split">
+        <svg fill="#bbbbbb" width="15" height="15" version="1.1" id="heart-15" xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 15 15">
+  <path d="M13.91,6.75c-1.17,2.25-4.3,5.31-6.07,6.94c-0.1903,0.1718-0.4797,0.1718-0.67,0C5.39,12.06,2.26,9,1.09,6.75&#xA;&#x9;C-1.48,1.8,5-1.5,7.5,3.45C10-1.5,16.48,1.8,13.91,6.75z"/>
+</svg>
+       </span>
+       
+    
+    </p>
+    <p class="powerby">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+  </body>
+</html>
