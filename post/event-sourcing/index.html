@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Demystifying Event Sourcing - Jacy Gao</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Jacy Gao" /><meta name="description" content="The inspiration behind this blog is from numerous great conversations while working with ThroughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
+Definition I&amp;rsquo;ll start by looking at the definitions.
+Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
+Martin Fowler, 2005:
+&amp;quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.87.0 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/event-sourcing/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Demystifying Event Sourcing" />
+<meta property="og:description" content="The inspiration behind this blog is from numerous great conversations while working with ThroughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
+Definition I&rsquo;ll start by looking at the definitions.
+Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
+Martin Fowler, 2005:
+&quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/event-sourcing/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-08-29T23:20:45+10:00" />
+<meta property="article:modified_time" content="2021-08-29T23:20:45+10:00" />
+
+<meta itemprop="name" content="Demystifying Event Sourcing">
+<meta itemprop="description" content="The inspiration behind this blog is from numerous great conversations while working with ThroughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
+Definition I&rsquo;ll start by looking at the definitions.
+Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
+Martin Fowler, 2005:
+&quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events."><meta itemprop="datePublished" content="2021-08-29T23:20:45+10:00" />
+<meta itemprop="dateModified" content="2021-08-29T23:20:45+10:00" />
+<meta itemprop="wordCount" content="912">
+<meta itemprop="keywords" content="event-sourcing," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Demystifying Event Sourcing"/>
+<meta name="twitter:description" content="The inspiration behind this blog is from numerous great conversations while working with ThroughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
+Definition I&rsquo;ll start by looking at the definitions.
+Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
+Martin Fowler, 2005:
+&quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Jacy Gao</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Jacy Gao</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Demystifying Event Sourcing</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-08-29 </span>
+        <div class="post-category">
+            <a href="/categories/architecture/"> Architecture </a>
+            <a href="/categories/events/"> Events </a>
+            <a href="/categories/ddd/"> DDD </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#definition">Definition</a></li>
+    <li><a href="#state-as-event-vs-state-from-event">State as Event vs State from Event</a></li>
+    <li><a href="#domain-events-vs-event-sourcing-events">Domain Events vs Event Sourcing Events</a></li>
+    <li><a href="#command-sourcing-vs-event-sourcing">Command Sourcing vs Event Sourcing</a></li>
+    <li><a href="#tldr">TL,DR</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>The inspiration behind this blog is from numerous great conversations while working with ThroughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.</p>
+<h1 id="definition">Definition</h1>
+<p>I&rsquo;ll start by looking at the definitions.</p>
+<p>Martin Fowler and Greg Young have both written great definitions of Event Sourcing:</p>
+<p><a href="https://martinfowler.com/eaaDev/EventSourcing.html">Martin Fowler, 2005</a>:</p>
+<pre><code>&quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events.&quot;
+</code></pre>
+<p>Greg Young, 2014:</p>
+<pre><code>&quot;Event Sourcing says all state is transient and you only store facts.&quot;
+</code></pre>
+<p>Another good definition I came cross is in this <a href="(https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)">Microsoft&rsquo;s article</a>:</p>
+<pre><code>&quot;Instead of storing just the current state of the data in a domain, use an append-only store to record the full series of actions taken on that data.&quot;
+</code></pre>
+<p>Two key words here are &ldquo;state&rdquo; and &ldquo;events&rdquo;. One for my early confusions about Event Sourcing was because I was overly focusing on &ldquo;events&rdquo; but overlooked &ldquo;state&rdquo;. In fact, Event Sourcing, at its core, is about storing and representing state as events.</p>
+<h1 id="state-as-event-vs-state-from-event">State as Event vs State from Event</h1>
+<p>Typically, state is maintained in a datatbase. Event logs are sometimes emitted when we update the state but the source of truth is the state in the database. Event Sourcing, on the other hand, promotes the event log to be the source of truth. The storage used to keep event logs is often called Event Store. All updates are only appended as new events, and no longer as state changes.</p>
+<p>The double-entry accounting ledger is the primary example of event sourcing. Consider the following record of the balance of a bank account:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Account   BSB      Balance   Date
+4928341   565789   $5280     01-09-2021
+</code></pre></td></tr></table>
+</div>
+</div><p>On every transaction, the account balance needs to be updated. An event log of that transaction is usually stored in a different database table or a separate storage.</p>
+<p>With Event Sourcing, data is often store as a sequence of events, for example:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Account   BSB      Type     Balance   Description   Date
+4928341   565789   Credit   $5500     Salary        01-09-2021
+4928341   565789   Debit    $200      Resturant     01-09-2021
+4928341   565789   Debit    $25       Uber          01-09-2021
+4928341   565789   Debit    $55       Shopping      01-09-2021
+</code></pre></td></tr></table>
+</div>
+</div><p>Now the event logs are essentially the state of the bank account. By playing all the events in memory, we can get the exactly same current state of the account balance.</p>
+<p>Event Sourcing can be described as &ldquo;State as Event&rdquo;. It should be differentiated from &ldquo;State from Events&rdquo;. The distinction is important. “State from Events” consumes events from an existing event stream or event bus, regardless of how it was produced, and projects state from it. This approach is often associated with an Event Driven Architecture and Domain Driven Design.</p>
+<h1 id="domain-events-vs-event-sourcing-events">Domain Events vs Event Sourcing Events</h1>
+<p>Domain Events are described as something that happens in the domain and is important to domain experts. Such events typically occur regardless of whether or to what extent the domain is implemented in a software system.</p>
+<p>Examples of Domain Events can be:</p>
+<ul>
+<li>UserRegistered</li>
+<li>OrderPlaced</li>
+<li>PaymentDeadlineExpired</li>
+</ul>
+<p>Domain events are typically used for communication and colaboration between domains, such as an event notification to inform something has happened, or state transfer from one domain to another by carrying necessary information as part of the event payload.</p>
+<p>Domain Events are Public Events. These events are published to an event stream for other parts of the system to consume and process.</p>
+<p>Event Sourcing events, on the other hand, aren&rsquo;t exposed to the other domains. These events are usually private events processed within a specific domain. This is also call an aggregate. For example, <code>UserRegistration</code> aggregate could have the following events:</p>
+<ul>
+<li>EmailAddressEntered (<a href="mailto:email@example.com">email@example.com</a>)</li>
+<li>VerificationCodeGenerated (123456)</li>
+<li>EmailAddressValidated</li>
+<li>UserDetailsSubmitted (<code>{firstname: John, lastname: Doe, gender: male, phone: +12345678}</code>)</li>
+</ul>
+<p>By playing the series of events, we have the current state of the user.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">email               ver_code    isValid    details
+email@example.com   123456      true       {firstname: John, lastname: Doe, gender: male, phone: +12345678}
+</code></pre></td></tr></table>
+</div>
+</div><p>In contrast, Event Sourcing Events can be seen as private events. These events live within a specific domain where Domain Events are public that move across domains.</p>
+<h1 id="command-sourcing-vs-event-sourcing">Command Sourcing vs Event Sourcing</h1>
+<p>Replayablily is often mentioned as one of the benefits of Event Sourcing. However, many times people are referring to Command Sourcing.</p>
+<p><a href="https://martinfowler.com/eaaDev/EventNarrative.html">Martin Fowler 2006</a>:</p>
+<pre><code>&quot;With a command you tell a system to do X. Events, however, just communicate that something happened - with an event you let a system know that Y has happened.&quot;
+</code></pre>
+<p>According to the definition from Martin, a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state where an event is something that happen and that cannot be changed.</p>
+<p>The replayablily of Event Sourcing is about replaying the events in an event store, sometimes from a most recent snapshot, to recreate the current state of the records as opposed to replaying the commands in which in that case, is Command Sourcing.</p>
+<h1 id="tldr">TL,DR</h1>
+<ul>
+<li>Event Sourcing is first and foremost about &ldquo;state&rdquo;, and then &ldquo;events&rdquo;</li>
+<li>Event Sourcing is about &ldquo;State as Event&rdquo; where Event Driven is about &ldquo;State from Event&rdquo;. Event Sourcing is different from Event Driven</li>
+<li>Domain Events are &ldquo;public events&rdquo; that moving across domains where Event Sourcing Events are &ldquo;private events&rdquo; that are processed within a specific domain</li>
+<li>Be very careful with the replayability of Event Sourcing. Often it is misintepreted as something else such as Command Sourcing</li>
+</ul>
+<h1 id="references">References</h1>
+<p><a href="https://verraes.net/2019/08/eventsourcing-state-from-events-vs-events-as-state/">https://verraes.net/2019/08/eventsourcing-state-from-events-vs-events-as-state/</a></p>
+<p><a href="https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/">https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/</a></p>
+<p><a href="https://thinkbeforecoding.com/post/2013/07/28/Event-Sourcing-vs-Command-Sourcing">https://thinkbeforecoding.com/post/2013/07/28/Event-Sourcing-vs-Command-Sourcing</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Jacy Gao</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-08-29
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/event-sourcing/">event-sourcing</a>
+          </div>
+      <nav class="post-nav">
+        
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:aus.jacy@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.linkedin.com/in/jacy-gao-45311551/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/jacygao" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>olOwOlo</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
