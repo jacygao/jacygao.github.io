@@ -61,7 +61,7 @@ Martin Fowler and Greg Young have both written great definitions of Event Sourci
 Martin Fowler, 2005:
 &quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events."><meta itemprop="datePublished" content="2021-08-29T23:20:45+10:00" />
 <meta itemprop="dateModified" content="2021-08-29T23:20:45+10:00" />
-<meta itemprop="wordCount" content="912">
+<meta itemprop="wordCount" content="916">
 <meta itemprop="keywords" content="event-sourcing," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Demystifying Event Sourcing"/>
 <meta name="twitter:description" content="The inspiration behind this blog is from numerous great conversations while working with ThroughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
@@ -154,7 +154,7 @@ Martin Fowler, 2005:
             <a href="/categories/events/"> Events </a>
             <a href="/categories/ddd/"> DDD </a>
             </div>
-          <span class="more-meta"> 912 words </span>
+          <span class="more-meta"> 916 words </span>
           <span class="more-meta"> 5 mins read </span>
         
       </div>
@@ -183,16 +183,16 @@ Martin Fowler, 2005:
 <p><a href="https://martinfowler.com/eaaDev/EventSourcing.html">Martin Fowler, 2005</a>:</p>
 <pre><code>&quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events.&quot;
 </code></pre>
-<p>Greg Young, 2014:</p>
+<p><a href="https://www.slideshare.net/JAXLondon2014/event-sourcing-greg-young">Greg Young, 2014</a>:</p>
 <pre><code>&quot;Event Sourcing says all state is transient and you only store facts.&quot;
 </code></pre>
 <p>Another good definition I came cross is in this <a href="(https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)">Microsoft&rsquo;s article</a>:</p>
 <pre><code>&quot;Instead of storing just the current state of the data in a domain, use an append-only store to record the full series of actions taken on that data.&quot;
 </code></pre>
-<p>Two key words here are &ldquo;state&rdquo; and &ldquo;events&rdquo;. One for my early confusions about Event Sourcing was because I was overly focusing on &ldquo;events&rdquo; but overlooked &ldquo;state&rdquo;. In fact, Event Sourcing, at its core, is about storing and representing state as events.</p>
+<p>Two key words here are &ldquo;state&rdquo; and &ldquo;events&rdquo;. One for my early confusions about Event Sourcing was because I was overly focusing on &ldquo;events&rdquo; but overlooked &ldquo;state&rdquo;. In fact, Event Sourcing, at its core, is about storing and representing &ldquo;state as events&rdquo;.</p>
 <h1 id="state-as-event-vs-state-from-event">State as Event vs State from Event</h1>
 <p>Typically, state is maintained in a datatbase. Event logs are sometimes emitted when we update the state but the source of truth is the state in the database. Event Sourcing, on the other hand, promotes the event log to be the source of truth. The storage used to keep event logs is often called Event Store. All updates are only appended as new events, and no longer as state changes.</p>
-<p>The double-entry accounting ledger is the primary example of event sourcing. Consider the following record of the balance of a bank account:</p>
+<p>The double-entry accounting ledger is the primary example of Event Sourcing. Consider the following record of the balance of a bank account:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -204,7 +204,7 @@ Martin Fowler, 2005:
 </code></pre></td></tr></table>
 </div>
 </div><p>On every transaction, the account balance needs to be updated. An event log of that transaction is usually stored in a different database table or a separate storage.</p>
-<p>With Event Sourcing, data is often store as a sequence of events, for example:</p>
+<p>With Event Sourcing, data is stored as a sequence of events, as per example below:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -214,14 +214,14 @@ Martin Fowler, 2005:
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Account   BSB      Type     Balance   Description   Date
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Account   BSB      Type     Amount    Description   Date
 4928341   565789   Credit   $5500     Salary        01-09-2021
-4928341   565789   Debit    $200      Resturant     01-09-2021
-4928341   565789   Debit    $25       Uber          01-09-2021
-4928341   565789   Debit    $55       Shopping      01-09-2021
+4928341   565789   Debit    $100      Resturant     01-09-2021
+4928341   565789   Debit    $20       Uber          01-09-2021
+4928341   565789   Debit    $100      Shopping      01-09-2021
 </code></pre></td></tr></table>
 </div>
-</div><p>Now the event logs are essentially the state of the bank account. By playing all the events in memory, we can get the exactly same current state of the account balance.</p>
+</div><p>Now the event logs are essentially the state of the bank account. By playing all the events in memory, we can get the exactly same current state of the account.</p>
 <p>Event Sourcing can be described as &ldquo;State as Event&rdquo;. It should be differentiated from &ldquo;State from Events&rdquo;. The distinction is important. “State from Events” consumes events from an existing event stream or event bus, regardless of how it was produced, and projects state from it. This approach is often associated with an Event Driven Architecture and Domain Driven Design.</p>
 <h1 id="domain-events-vs-event-sourcing-events">Domain Events vs Event Sourcing Events</h1>
 <p>Domain Events are described as something that happens in the domain and is important to domain experts. Such events typically occur regardless of whether or to what extent the domain is implemented in a software system.</p>
@@ -231,7 +231,7 @@ Martin Fowler, 2005:
 <li>OrderPlaced</li>
 <li>PaymentDeadlineExpired</li>
 </ul>
-<p>Domain events are typically used for communication and colaboration between domains, such as an event notification to inform something has happened, or state transfer from one domain to another by carrying necessary information as part of the event payload.</p>
+<p>Domain events are typically used for communication and collaboration between domains, such as an event notification to inform something has happened, or state transfer from one domain to another by carrying necessary information as part of the event payload.</p>
 <p>Domain Events are Public Events. These events are published to an event stream for other parts of the system to consume and process.</p>
 <p>Event Sourcing events, on the other hand, aren&rsquo;t exposed to the other domains. These events are usually private events processed within a specific domain. This is also call an aggregate. For example, <code>UserRegistration</code> aggregate could have the following events:</p>
 <ul>
@@ -251,7 +251,7 @@ Martin Fowler, 2005:
 email@example.com   123456      true       {firstname: John, lastname: Doe, gender: male, phone: +12345678}
 </code></pre></td></tr></table>
 </div>
-</div><p>In contrast, Event Sourcing Events can be seen as private events. These events live within a specific domain where Domain Events are public that move across domains.</p>
+</div><p>In contrast, Event Sourcing Events can be seen as private events. These events live within a specific domain. Domain Events are public events. These events move across domains.</p>
 <h1 id="command-sourcing-vs-event-sourcing">Command Sourcing vs Event Sourcing</h1>
 <p>Replayablily is often mentioned as one of the benefits of Event Sourcing. However, many times people are referring to Command Sourcing.</p>
 <p><a href="https://martinfowler.com/eaaDev/EventNarrative.html">Martin Fowler 2006</a>:</p>
@@ -263,10 +263,14 @@ email@example.com   123456      true       {firstname: John, lastname: Doe, gend
 <ul>
 <li>Event Sourcing is first and foremost about &ldquo;state&rdquo;, and then &ldquo;events&rdquo;</li>
 <li>Event Sourcing is about &ldquo;State as Event&rdquo; where Event Driven is about &ldquo;State from Event&rdquo;. Event Sourcing is different from Event Driven</li>
-<li>Domain Events are &ldquo;public events&rdquo; that moving across domains where Event Sourcing Events are &ldquo;private events&rdquo; that are processed within a specific domain</li>
+<li>Domain Events are &ldquo;public events&rdquo; that move across domains where Event Sourcing Events are &ldquo;private events&rdquo; that live within a specific domain</li>
 <li>Be very careful with the replayability of Event Sourcing. Often it is misintepreted as something else such as Command Sourcing</li>
 </ul>
 <h1 id="references">References</h1>
+<p><a href="https://martinfowler.com/eaaDev/EventSourcing.html">https://martinfowler.com/eaaDev/EventSourcing.html</a></p>
+<p><a href="https://martinfowler.com/eaaDev/EventNarrative.html">https://martinfowler.com/eaaDev/EventNarrative.html</a></p>
+<p><a href="https://www.slideshare.net/JAXLondon2014/event-sourcing-greg-young">https://www.slideshare.net/JAXLondon2014/event-sourcing-greg-young</a></p>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing">https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing</a></p>
 <p><a href="https://verraes.net/2019/08/eventsourcing-state-from-events-vs-events-as-state/">https://verraes.net/2019/08/eventsourcing-state-from-events-vs-events-as-state/</a></p>
 <p><a href="https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/">https://www.innoq.com/en/blog/domain-events-versus-event-sourcing/</a></p>
 <p><a href="https://thinkbeforecoding.com/post/2013/07/28/Event-Sourcing-vs-Command-Sourcing">https://thinkbeforecoding.com/post/2013/07/28/Event-Sourcing-vs-Command-Sourcing</a></p>
