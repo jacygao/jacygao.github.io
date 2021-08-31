@@ -17,7 +17,7 @@
 Definition I&amp;rsquo;ll start by looking at the definitions.
 Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
 Martin Fowler, 2005:
-&amp;quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events.</description>
+ &amp;ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events.</description>
     </item>
     
   </channel>
