@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Why should you or shouldn&#39;t consider Event Sourcing - Jacy Gao</title>
+  <title>Use cases for Event Sourcing - Jacy Gao</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -18,7 +18,7 @@
 
 <meta name="author" content="Jacy Gao" /><meta name="description" content="This is the 2nd blog of the series on Event Sourcing. If you are not familiar with the concept, make sure to check out Demystifying Event Sourcing.
 Status In Progress
-Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementation of Event Sourcing in real life.
+Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementations of Event Sourcing in real life.
 Why is it a great use case of Event Sourcing?" /><meta name="keywords" content="Hugo, blog, tech, architecture, engineering, leadership, Golang" />
 
 
@@ -42,28 +42,28 @@ Why is it a great use case of Event Sourcing?" /><meta name="keywords" content="
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Why should you or shouldn&#39;t consider Event Sourcing" />
+<meta property="og:title" content="Use cases for Event Sourcing" />
 <meta property="og:description" content="This is the 2nd blog of the series on Event Sourcing. If you are not familiar with the concept, make sure to check out Demystifying Event Sourcing.
 Status In Progress
-Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementation of Event Sourcing in real life.
+Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementations of Event Sourcing in real life.
 Why is it a great use case of Event Sourcing?" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://localhost:1313/post/event-sourcing-2/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-08-30T23:58:26+10:00" />
 <meta property="article:modified_time" content="2021-08-30T23:58:26+10:00" />
 
-<meta itemprop="name" content="Why should you or shouldn&#39;t consider Event Sourcing">
+<meta itemprop="name" content="Use cases for Event Sourcing">
 <meta itemprop="description" content="This is the 2nd blog of the series on Event Sourcing. If you are not familiar with the concept, make sure to check out Demystifying Event Sourcing.
 Status In Progress
-Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementation of Event Sourcing in real life.
+Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementations of Event Sourcing in real life.
 Why is it a great use case of Event Sourcing?"><meta itemprop="datePublished" content="2021-08-30T23:58:26+10:00" />
 <meta itemprop="dateModified" content="2021-08-30T23:58:26+10:00" />
-<meta itemprop="wordCount" content="534">
+<meta itemprop="wordCount" content="531">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Why should you or shouldn&#39;t consider Event Sourcing"/>
+<meta name="twitter:title" content="Use cases for Event Sourcing"/>
 <meta name="twitter:description" content="This is the 2nd blog of the series on Event Sourcing. If you are not familiar with the concept, make sure to check out Demystifying Event Sourcing.
 Status In Progress
-Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementation of Event Sourcing in real life.
+Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementations of Event Sourcing in real life.
 Why is it a great use case of Event Sourcing?"/>
 
 <!--[if lte IE 9]>
@@ -141,12 +141,12 @@ Why is it a great use case of Event Sourcing?"/>
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Why should you or shouldn&#39;t consider Event Sourcing</h1>
+      <h1 class="post-title">Use cases for Event Sourcing</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2021-08-30 </span>
         
-          <span class="more-meta"> 534 words </span>
+          <span class="more-meta"> 531 words </span>
           <span class="more-meta"> 3 mins read </span>
         
       </div>
@@ -159,10 +159,10 @@ Why is it a great use case of Event Sourcing?"/>
   <ul>
     <li><a href="#status">Status</a></li>
     <li><a href="#event-sourcing-in-real-life">Event Sourcing in real life</a></li>
-    <li><a href="#auditability-vs-logging">Auditability vs logging</a></li>
+    <li><a href="#auditing-vs-logging">Auditing vs logging</a></li>
     <li><a href="#examples-of-event-sourcing-implementations">Examples of Event Sourcing Implementations</a></li>
-    <li><a href="#the-real-benifits-of-event-sourcing">The real benifits of Event Sourcing</a></li>
-    <li><a href="#when-should-you-use-event-sourcing">When should you use Event Sourcing</a></li>
+    <li><a href="#benifits-of-event-sourcing">Benifits of Event Sourcing</a></li>
+    <li><a href="#use-cases-of-event-sourcing">Use cases of Event Sourcing</a></li>
     <li><a href="#references">References</a></li>
   </ul>
 </nav>
@@ -173,21 +173,21 @@ Why is it a great use case of Event Sourcing?"/>
 <h1 id="status">Status</h1>
 <p>In Progress</p>
 <h1 id="event-sourcing-in-real-life">Event Sourcing in real life</h1>
-<p>The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementation of Event Sourcing in real life.</p>
-<p>Why is it a great use case of Event Sourcing? If you have heard of &ldquo;accountants don&rsquo;t use erasers&rdquo;, you know that in accounting, ledger entries cannot be erased and any incorrect entries are rectify by appending a new entry instead of erasing it.</p>
-<p>The 2 takeaway from this example is auditability and immutability. By keeping every single entry to an account, we effectively get a full insights of every change to the account, even the mistakes we made.</p>
-<p>Accounting Ledger is not the only example, consider how lawyers append terms to a contract, doctors append description to your medical records. The benifit is clear, by using Event Sourcing, you have the full auditability of every event happened to an entity.</p>
-<h1 id="auditability-vs-logging">Auditability vs logging</h1>
-<p>It is worth to compare the 2 concepts. There are a lot of overlapping between the two, however fundamentall they are 2 seperate concepts.</p>
-<p>Logging is an instrument that provides visibility to the request flow of an application system which helps developers with troubleshooting. Auditability is a feature of an application system. Every system needs logging, some systems need auditability.</p>
+<p>The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementations of Event Sourcing in real life.</p>
+<p>Why is it a great use case of Event Sourcing? If you have heard of &ldquo;accountants don&rsquo;t use erasers&rdquo;, you know that in accounting, ledger entries cannot be erased and any incorrect entries are rectified by appending a new entry instead of erasing it.</p>
+<p>The 2 takeaways from this example is auditability and immutability. By keeping every single entry to an account, we effectively get a full insights of every change to the account, even the mistakes we made.</p>
+<p>Accounting Ledger is not the only example, consider how lawyers append terms to a contract, doctors append description to your medical records. The benefit is clear, by using Event Sourcing, you have the full auditability of every event happened to an entity.</p>
+<h1 id="auditing-vs-logging">Auditing vs logging</h1>
+<p>It is worth to compare the 2 concepts. There are a lot of overlapping between the two, however fundamentally they are 2 seperate concepts.</p>
+<p>Logging is an instrument that provides visibility to the request flow of an application system which helps developers with troubleshooting. Auditability is a feature of an application system. Every system needs logging, some systems need auditing.</p>
 <p>From an implementation perspective, logging often happens after an event or a process. For example, UserRegistered event triggers and update of the user record in the database, then emit a log message &ldquo;user registered&rdquo;. Note that the update and logging are 2 seperate processes which means that a system failure could happen in between which can cause the loss of the log. In most situations it does not matter as there are other mechanisms to help developers understand what went wrong.</p>
 <p>Auditability, on the other hand, cannot torlerate such failure. Therefore, certain concensus algorithms such as 2PC are often applied to ensure the ACID for the audit log. Event Sourcing addresses this problem by making &ldquo;logging&rdquo; the only operation to store both state and logs which lead to consistency of auditability.</p>
 <h1 id="examples-of-event-sourcing-implementations">Examples of Event Sourcing Implementations</h1>
 <p>Git is often referred by Event Sourcing, However, Git is not an implementation of Event Sourcing. Git uses the snapshotting technique to keep its history of commits. This technique is commonly used with Event Sourcing. However snapshots are not events.</p>
 <p>Database management systems are good examples of Event Sourcing. Records presented in the database are materialised by applying a series of transaction logs. The source of truth are the transaction logs. In case of any system or operation failures such as crashes or hardware failures, the records can be effectively restored or rolled back from reviewing the transaction logs.</p>
 <p>Order Management is often partially implemented with Event Sourcing. The main intension is to address the issue with consistency across multiple operations. An event store can be used as both database and queue.</p>
-<h1 id="the-real-benifits-of-event-sourcing">The real benifits of Event Sourcing</h1>
-<h1 id="when-should-you-use-event-sourcing">When should you use Event Sourcing</h1>
+<h1 id="benifits-of-event-sourcing">Benifits of Event Sourcing</h1>
+<h1 id="use-cases-of-event-sourcing">Use cases of Event Sourcing</h1>
 <h1 id="references">References</h1>
 <p><a href="https://en.wikipedia.org/wiki/Transaction_log">https://en.wikipedia.org/wiki/Transaction_log</a></p>
 

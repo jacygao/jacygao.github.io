@@ -6,20 +6,16 @@
     <description>Recent content in Posts on Jacy Gao</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 30 Aug 2021 23:58:26 +1000</lastBuildDate>
-    
-	<atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 30 Aug 2021 23:58:26 +1000</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Why should you or shouldn&#39;t consider Event Sourcing</title>
+      <title>Use cases for Event Sourcing</title>
       <link>http://localhost:1313/post/event-sourcing-2/</link>
       <pubDate>Mon, 30 Aug 2021 23:58:26 +1000</pubDate>
       
       <guid>http://localhost:1313/post/event-sourcing-2/</guid>
       <description>This is the 2nd blog of the series on Event Sourcing. If you are not familiar with the concept, make sure to check out Demystifying Event Sourcing.
 Status In Progress
-Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementation of Event Sourcing in real life.
+Event Sourcing in real life The concept of Event Sourcing was inspired by real world examples. The primary example - the double entry accounting ledger is considered one of the earliest implementations of Event Sourcing in real life.
 Why is it a great use case of Event Sourcing?</description>
     </item>
     
@@ -33,7 +29,7 @@ Why is it a great use case of Event Sourcing?</description>
 Definition I&amp;rsquo;ll start by looking at the definitions.
 Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
 Martin Fowler, 2005:
-&amp;quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events.</description>
+ &amp;ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events.</description>
     </item>
     
   </channel>

@@ -6,11 +6,7 @@
     <description>Recent content in DDD on Jacy Gao</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 29 Aug 2021 23:20:45 +1000</lastBuildDate>
-    
-	<atom:link href="http://localhost:1313/categories/ddd/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 29 Aug 2021 23:20:45 +1000</lastBuildDate><atom:link href="http://localhost:1313/categories/ddd/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Demystifying Event Sourcing</title>
       <link>http://localhost:1313/post/event-sourcing/</link>
@@ -21,7 +17,7 @@
 Definition I&amp;rsquo;ll start by looking at the definitions.
 Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
 Martin Fowler, 2005:
-&amp;quot;Event Sourcing ensures that all changes to application state are stored as a sequence of events.</description>
+ &amp;ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events.</description>
     </item>
     
   </channel>
