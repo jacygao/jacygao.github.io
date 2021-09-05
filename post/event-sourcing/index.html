@@ -61,7 +61,7 @@ Martin Fowler and Greg Young have both written great definitions of Event Sourci
 Martin Fowler, 2005:
  &ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events."><meta itemprop="datePublished" content="2021-08-29T23:20:45+10:00" />
 <meta itemprop="dateModified" content="2021-08-29T23:20:45+10:00" />
-<meta itemprop="wordCount" content="915">
+<meta itemprop="wordCount" content="1023">
 <meta itemprop="keywords" content="event-sourcing," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Demystifying Event Sourcing"/>
 <meta name="twitter:description" content="The inspiration behind this blog is from numerous great conversations while working with ThoughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
@@ -154,7 +154,7 @@ Martin Fowler, 2005:
             <a href="/categories/events/"> Events </a>
             <a href="/categories/ddd/"> DDD </a>
             </div>
-          <span class="more-meta"> 915 words </span>
+          <span class="more-meta"> 1023 words </span>
           <span class="more-meta"> 5 mins read </span>
         
       </div>
@@ -258,9 +258,12 @@ email@example.com   123456      true       {firstname: John, lastname: Doe, gend
 <h1 id="command-sourcing-vs-event-sourcing">Command Sourcing vs Event Sourcing</h1>
 <p>Replayablily is often mentioned as one of the benefits of Event Sourcing. However, many times people are referring to Command Sourcing.</p>
 <p><a href="https://martinfowler.com/eaaDev/EventNarrative.html">Martin Fowler 2006</a>:</p>
-<pre><code>&quot;With a command you tell a system to do X. Events, however, just communicate that something happened - with an event you let a system know that Y has happened.&quot;
-</code></pre>
-<p>According to the definition from Martin, a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state where an event is something that happen and that cannot be changed.</p>
+<blockquote>
+<p>&ldquo;With a command you tell a system to do X. Events, however, just communicate that something happened - with an event you let a system know that Y has happened.&rdquo;</p>
+</blockquote>
+<p>According to the definition from Martin, a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state. Nevertheless, an event is something already happened and that cannot be changed.</p>
+<p>A simple workflow representation of Event Sourcing can be descibed as <code>State -&gt; Event -&gt; State</code>. In this case, the event itself is deterministic. It has all required information to make the state transition and perform an &ldquo;closure&rdquo;.</p>
+<p>In contrast, Command Sourcing can be described as <code>State -&gt; Command -&gt; Event</code>. In this case, the command itself does not have all required information to determine a state change but rely on an external input. A consequence of this is that you can&rsquo;t simply replay a stream of logged commands at some arbitrary time and guarantee to get the same outputs as you would if they were handled immediatly.</p>
 <p>The replayablily of Event Sourcing is about replaying the events in an event store, sometimes from a most recent snapshot, to recreate the current state of the records as opposed to replaying the commands in which in that case, is Command Sourcing.</p>
 <h1 id="tldr">TL,DR</h1>
 <ul>
