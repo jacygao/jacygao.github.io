@@ -192,7 +192,7 @@ Martin Fowler, 2005:
 </ul>
 <p>Domain events are typically used for communication and collaboration between domains, such as an event notification to inform something has happened, or state transfer from one domain to another by carrying necessary information as part of the event payload.</p>
 <p>Domain Events are Public Events. These events are published to an event stream for other parts of the system to consume and process.</p>
-<p>Event Sourcing events, on the other hand, aren&rsquo;t exposed to other domains. These events are usually private events processed within a specific domain. This is also call an aggregate. For example, <code>UserRegistration</code> aggregate could have the following events:</p>
+<p>Event Sourcing events, on the other hand, aren&rsquo;t exposed to other domains. These events are usually private events processed within a specific domain. This is also called an aggregate. For example, <code>UserRegistration</code> aggregate could have the following events:</p>
 <ul>
 <li>EmailAddressEntered (<a href=mailto:email@example.com>email@example.com</a>)</li>
 <li>VerificationCodeGenerated (123456)</li>
