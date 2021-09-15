@@ -66,7 +66,7 @@ Domain events are typically used for communication and collaboration between dom
 
 Domain Events are Public Events. These events are published to an event stream for other parts of the system to consume and process. 
 
-Event Sourcing events, on the other hand, aren't exposed to other domains. These events are usually private events processed within a specific domain. This is also call an aggregate. For example, `UserRegistration` aggregate could have the following events:
+Event Sourcing events, on the other hand, aren't exposed to other domains. These events are usually private events processed within a specific domain. This is also called an aggregate. For example, `UserRegistration` aggregate could have the following events:
 
 - EmailAddressEntered (email@example.com)
 - VerificationCodeGenerated (123456)
