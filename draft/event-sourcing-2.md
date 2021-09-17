@@ -15,9 +15,19 @@ The concept of Event Sourcing was inspired by real world examples. The primary e
 
 Why is it a great use case of Event Sourcing? If you have heard of "accountants don't use erasers", you know that in accounting, ledger entries cannot be erased and any incorrect entries are rectified by appending a new entry instead of erasing it.
 
+```
+Account   BSB      Type     Amount    Description   Date
+4928341   565789   Credit   $5500     Salary        01-09-2021
+4928341   565789   Debit    $100      Resturant     01-09-2021
+4928341   565789   Debit    $20       Uber          01-09-2021
+4928341   565789   Debit    $100      Shopping      01-09-2021
+4928341   565789   Credit   $500      WrongEntry    01-09-2021
+4928341   565789   Debit    $500      Correction    01-09-2021
+```
+
 The 2 takeaways from this example is auditability and immutability. By keeping every single entry to an account, we effectively get a full insights of every change to the account, even the mistakes we made.
 
-Accounting Ledger is not the only example, consider how lawyers append terms to a contract, doctors append description to your medical records. The benefit is clear, by using Event Sourcing, you have the full auditability of every event happened to an entity. 
+Accounting Ledger is not the only example, consider how lawyer adding addendum to a contract, doctors append description to your medical records. The benefit is clear, by using Event Sourcing, you have the full auditability of every event happened to an entity. 
 
 # Auditing vs logging
 
@@ -38,6 +48,16 @@ Database management systems are good examples of Event Sourcing. Records present
 Order Management is often partially implemented with Event Sourcing. The main intension is to address the issue with consistency across multiple operations. An event store can be used as both database and queue.
 
 # Benifits of Event Sourcing
+
+Event Sourcing is the only way to guarantee you event logs in distributed architecture
+
+"avoid having to use a 2pc transaction between the data model and the message queue" - Young
+
+"Testing with the events that actually happens" - Young
+
+"visualise concurrency violation" - Young
+
+"performance benifits due to only one disk write for both your storage and your durable queue" - Young
 
 # Use cases of Event Sourcing
 
