@@ -59,8 +59,18 @@ Event Sourcing is the only way to guarantee you event logs in distributed archit
 
 "performance benifits due to only one disk write for both your storage and your durable queue" - Young
 
-# Use cases of Event Sourcing
+# When to Event Sourcing
+
+When capturing intent, purpose and data in state changes is crucial to the business. For example, changes to a customer entity can be captured as a series of specific event types, such as Moved home, Closed account, or Deceased.
+
+When you want to record events that occur, and be able to replay them to restore the state to a specific point in time, roll back changes, or keep a history of audit log
+
+When using events is a natural feature of the operation of the application and real-time updates to the views of the data are not required.
+
+When it's vital to avoid the occurrence of conflicting updates to data.
 
 # References
 
 https://en.wikipedia.org/wiki/Transaction_log
+
+https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing
