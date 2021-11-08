@@ -7,9 +7,9 @@ categories: ["Architecture", "Events", "DDD"]
 author: "Jacy Gao"
 ---
 
-Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summerise everything I was wrong about Event Sourcing.
+Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summarise everything I was wrong about Event Sourcing.
 
-# Event vs State
+# State vs Event
 
 The very first thing i was wrong about Event Sourcing is how I understood the definition of Event Sourcing.
 
@@ -54,7 +54,7 @@ Account   BSB      Event    Amount    Description   Date
 ```
 The event logs are essentially the state of the bank account. By playing all the events in memory, we can get the same current state of the account.
 
-In this sense, Event Sourcing can be described as "State as Event". It should be differentiated from "Event from State". The distinction is important. “Event from State” produces an event upon change of a data state. One or many consumers may consume that event, regardless of how it was produced. This approach is commonly implemented in an Event Driven Architecture.
+In this sense, Event Sourcing can be described as "State as Event". It should be differentiated from "Event from State". The distinction is important. “Event from State” produced an event upon change of a data state. One or many consumers may consume that event, regardless of how it was produced. This approach is commonly implemented in an Event Driven Architecture.
 
 # Event Driven vs Event Sourcing
 
@@ -104,7 +104,7 @@ Replayablily is often mentioned as one of the benefits of Event Sourcing. Howeve
 
 According to the definition from Martin, a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state. Nevertheless, an event is something already happened and that cannot be changed.
 
-A simple workflow representation of Event Sourcing can be descibed as `State -> Event -> State`. In this case, the event itself is deterministic. It has all required information to make the state transition and perform an "closure".
+A simple workflow representation of Event Sourcing can be descibed as `State -> Event -> State`. In this case, the event itself is deterministic. It has all required information to make the state transition.
 
 In contrast, Command Sourcing can be described as `State -> Command -> Event`. In this case, the command itself does not have all required information to determine a state change but rely on an external input. A consequence of this is that you can't simply replay a stream of logged commands at some arbitrary time and guarantee to get the same outputs as you would if they were handled immediatly. 
 
@@ -112,8 +112,8 @@ The replayablily of Event Sourcing is about replaying the events in an event sto
 
 # TL,DR
 
-- Event Sourcing is first and foremost about "state", and then "events"
-- Event Sourcing is about "State as Event" where Event Driven is about "State from Event". Event Sourcing is different from Event Driven
+- Event Sourcing is about representing "state", events are form of data
+- Event Sourcing is about "State as Event" where Event Driven is about "Event from State". Event Driven is not Event Sourcing
 - Domain Events are "public events" that move across domains where Event Sourcing Events are "private events" that live within a specific domain
 - Be very careful with the replayability of Event Sourcing. Often it is misintepreted as something else such as Command Sourcing
 
