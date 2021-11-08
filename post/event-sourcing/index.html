@@ -2,7 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
-<title>Demystifying Event Sourcing - Jacy Gao</title>
+<title>Everything I was wrong about Event Sourcing - Jacy Gao</title>
 <meta name=renderer content="webkit">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta http-equiv=cache-control content="no-transform">
@@ -11,12 +11,10 @@
 <meta name=msapplication-navbutton-color content="#f8f5ec">
 <meta name=apple-mobile-web-app-capable content="yes">
 <meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
-<meta name=author content="Jacy Gao"><meta name=description content="The inspiration behind this blog is from numerous great conversations while working with ThoughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
-Definition I&amp;rsquo;ll start by looking at the definitions.
-Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
-Martin Fowler, 2005:
- &amp;ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events."><meta name=keywords content="Hugo,blog,tech,architecture,engineering,leadership,Golang">
-<meta name=generator content="Hugo 0.88.1 with theme even">
+<meta name=author content="Jacy Gao"><meta name=description content="Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summerise everything I was wrong about Event Sourcing.
+Event vs State The very first thing i was wrong about Event Sourcing is how I understood the definition of Event Sourcing.
+There are a number of great definitions of Event Sourcing from the internet:"><meta name=keywords content="Hugo,blog,tech,architecture,engineering,leadership,Golang">
+<meta name=generator content="Hugo 0.89.1 with theme even">
 <link rel=canonical href=http://localhost:1313/post/event-sourcing/>
 <link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
@@ -25,31 +23,25 @@ Martin Fowler, 2005:
 <link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
 <link href=/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css rel=stylesheet>
 <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
-<meta property="og:title" content="Demystifying Event Sourcing">
-<meta property="og:description" content="The inspiration behind this blog is from numerous great conversations while working with ThoughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
-Definition I&rsquo;ll start by looking at the definitions.
-Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
-Martin Fowler, 2005:
- &ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events.">
+<meta property="og:title" content="Everything I was wrong about Event Sourcing">
+<meta property="og:description" content="Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summerise everything I was wrong about Event Sourcing.
+Event vs State The very first thing i was wrong about Event Sourcing is how I understood the definition of Event Sourcing.
+There are a number of great definitions of Event Sourcing from the internet:">
 <meta property="og:type" content="article">
 <meta property="og:url" content="http://localhost:1313/post/event-sourcing/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2021-08-29T23:20:45+10:00">
 <meta property="article:modified_time" content="2021-08-29T23:20:45+10:00">
-<meta itemprop=name content="Demystifying Event Sourcing">
-<meta itemprop=description content="The inspiration behind this blog is from numerous great conversations while working with ThoughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
-Definition I&rsquo;ll start by looking at the definitions.
-Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
-Martin Fowler, 2005:
- &ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events."><meta itemprop=datePublished content="2021-08-29T23:20:45+10:00">
+<meta itemprop=name content="Everything I was wrong about Event Sourcing">
+<meta itemprop=description content="Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summerise everything I was wrong about Event Sourcing.
+Event vs State The very first thing i was wrong about Event Sourcing is how I understood the definition of Event Sourcing.
+There are a number of great definitions of Event Sourcing from the internet:"><meta itemprop=datePublished content="2021-08-29T23:20:45+10:00">
 <meta itemprop=dateModified content="2021-08-29T23:20:45+10:00">
-<meta itemprop=wordCount content="1023">
+<meta itemprop=wordCount content="1285">
 <meta itemprop=keywords content="event-sourcing,"><meta name=twitter:card content="summary">
-<meta name=twitter:title content="Demystifying Event Sourcing">
-<meta name=twitter:description content="The inspiration behind this blog is from numerous great conversations while working with ThoughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
-Definition I&rsquo;ll start by looking at the definitions.
-Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
-Martin Fowler, 2005:
- &ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<meta name=twitter:title content="Everything I was wrong about Event Sourcing">
+<meta name=twitter:description content="Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summerise everything I was wrong about Event Sourcing.
+Event vs State The very first thing i was wrong about Event Sourcing is how I understood the definition of Event Sourcing.
+There are a number of great definitions of Event Sourcing from the internet:"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
 <script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
 </head>
 <body>
@@ -104,7 +96,7 @@ Martin Fowler, 2005:
 <div id=content class=content>
 <article class=post>
 <header class=post-header>
-<h1 class=post-title>Demystifying Event Sourcing</h1>
+<h1 class=post-title>Everything I was wrong about Event Sourcing</h1>
 <div class=post-meta>
 <span class=post-time> 2021-08-29 </span>
 <div class=post-category>
@@ -112,8 +104,8 @@ Martin Fowler, 2005:
 <a href=/categories/events/> Events </a>
 <a href=/categories/ddd/> DDD </a>
 </div>
-<span class=more-meta> 1023 words </span>
-<span class=more-meta> 5 mins read </span>
+<span class=more-meta> 1285 words </span>
+<span class=more-meta> 7 mins read </span>
 </div>
 </header>
 <div class=post-toc id=post-toc>
@@ -121,8 +113,9 @@ Martin Fowler, 2005:
 <div class="post-toc-content always-active">
 <nav id=TableOfContents>
 <ul>
-<li><a href=#definition>Definition</a></li>
-<li><a href=#state-as-event-vs-state-from-event>State as Event vs State from Event</a></li>
+<li><a href=#event-vs-state>Event vs State</a></li>
+<li><a href=#state-as-event-vs-event-from-state>State as Event vs Event from State</a></li>
+<li><a href=#event-driven-vs-event-sourcing>Event Driven vs Event Sourcing</a></li>
 <li><a href=#domain-events-vs-event-sourcing-events>Domain Events vs Event Sourcing Events</a></li>
 <li><a href=#command-sourcing-vs-event-sourcing>Command Sourcing vs Event Sourcing</a></li>
 <li><a href=#tldr>TL,DR</a></li>
@@ -132,10 +125,10 @@ Martin Fowler, 2005:
 </div>
 </div>
 <div class=post-content>
-<p>The inspiration behind this blog is from numerous great conversations while working with ThoughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.</p>
-<h1 id=definition>Definition</h1>
-<p>I&rsquo;ll start by looking at the definitions.</p>
-<p>Martin Fowler and Greg Young have both written great definitions of Event Sourcing:</p>
+<p>Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summerise everything I was wrong about Event Sourcing.</p>
+<h1 id=event-vs-state>Event vs State</h1>
+<p>The very first thing i was wrong about Event Sourcing is how I understood the definition of Event Sourcing.</p>
+<p>There are a number of great definitions of Event Sourcing from the internet:</p>
 <p><a href=https://martinfowler.com/eaaDev/EventSourcing.html>Martin Fowler, 2005</a>:</p>
 <blockquote>
 <p>&ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events.&rdquo;</p>
@@ -148,10 +141,12 @@ Martin Fowler, 2005:
 <blockquote>
 <p>&ldquo;Instead of storing just the current state of the data in a domain, use an append-only store to record the full series of actions taken on that data.&rdquo;</p>
 </blockquote>
-<p>Two key words here are &ldquo;state&rdquo; and &ldquo;events&rdquo;. One for my early confusions about Event Sourcing was because I was overly focusing on &ldquo;events&rdquo; but overlooked &ldquo;state&rdquo;. In fact, Event Sourcing, at its core, is about storing and representing &ldquo;state as events&rdquo;.</p>
-<h1 id=state-as-event-vs-state-from-event>State as Event vs State from Event</h1>
-<p>Typically, state is maintained in a datatbase. Event logs are sometimes emitted when we update the state but the source of truth is the state in the database. Event Sourcing, on the other hand, promotes the event log to be the source of truth. The storage used to keep event logs is often called Event Store. All updates are only appended as new events, and no longer as state changes.</p>
-<p>The double-entry accounting ledger is the primary example of Event Sourcing. Consider the following record of the balance of a bank account:</p>
+<p>Two key words here are &ldquo;state&rdquo; and &ldquo;event&rdquo;. Although Event Sourcing has the word &ldquo;event&rdquo; in its name, at its core, Event Sourcing is a pattern to represent state.</p>
+<p>Event Sourcing provides another way to store application and data state in contrast to CRUD. A sequence of events is the form of its state just like a data record in CRUD.</p>
+<h1 id=state-as-event-vs-event-from-state>State as Event vs Event from State</h1>
+<p>Typically, in a CRUD based data storage, state is maintained as individual records in tables. In some systems, event logs are emitted to a logging system by the application when we update the state, but the source of truth is the state in the database.</p>
+<p>In an Event Sourcing based data storage, event logs are promoted to be the source of truth. The storage used to keep these event logs is often called Event Store. All updates are only appended as new events, and no longer as state changes.</p>
+<p>Consider the following example of a double-entry accounting ledger. In a CRUD based data storage, a single record holds the current state of an account:</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
 <pre tabindex=0 class=chroma><code><span class=lnt>1
@@ -162,8 +157,8 @@ Martin Fowler, 2005:
 4928341   565789   $5280     01-09-2021
 </code></pre></td></tr></table>
 </div>
-</div><p>On every transaction, the account balance needs to be updated. An event log of that transaction is usually stored in a different database table or a separate storage.</p>
-<p>With Event Sourcing, data is stored as a sequence of events, as per example below:</p>
+</div><p>On every transaction, the account balance is updated. In order to keep a full history of transactions, an event log is created and usually stored in a different database table or a separate storage.</p>
+<p>In an Event Store, transactions are appended as a sequence of events, as per example below:</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
 <pre tabindex=0 class=chroma><code><span class=lnt>1
@@ -173,15 +168,19 @@ Martin Fowler, 2005:
 </span><span class=lnt>5
 </span></code></pre></td>
 <td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>Account   BSB      Type     Amount    Description   Date
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>Account   BSB      Event    Amount    Description   Date
 4928341   565789   Credit   $5500     Salary        01-09-2021
 4928341   565789   Debit    $100      Resturant     01-09-2021
 4928341   565789   Debit    $20       Uber          01-09-2021
 4928341   565789   Debit    $100      Shopping      01-09-2021
 </code></pre></td></tr></table>
 </div>
-</div><p>Now the event logs are essentially the state of the bank account. By playing all the events in memory, we can get the exactly same current state of the account.</p>
-<p>Event Sourcing can be described as &ldquo;State as Event&rdquo;. It should be differentiated from &ldquo;State from Events&rdquo;. The distinction is important. “State from Events” consumes events from an existing event stream or event bus, regardless of how it was produced, and projects state from it. This approach is often associated with an Event Driven Architecture and Domain Driven Design.</p>
+</div><p>The event logs are essentially the state of the bank account. By playing all the events in memory, we can get the same current state of the account.</p>
+<p>In this sense, Event Sourcing can be described as &ldquo;State as Event&rdquo;. It should be differentiated from &ldquo;Event from State&rdquo;. The distinction is important. “Event from State” produces an event upon change of a data state. One or many consumers may consume that event, regardless of how it was produced. This approach is commonly implemented in an Event Driven Architecture.</p>
+<h1 id=event-driven-vs-event-sourcing>Event Driven vs Event Sourcing</h1>
+<p>An Event Driven Architecture can be used for any kind of software system which is based on components communicating mainly or exclusively through events. For example, the creation of a user triggers the creation of a shopping cart. In a domain driven and service oritented architecture world, user and payment may belong to 2 seperate domains. In order to allow user to communicate with payment that a new user has been created, an event is produced to an Event stream. Payment as a consumer subscribes to that event and triggers an action of creating a shopping cart for that user whenever such event is received.</p>
+<p>Event sourcing is a more domain specific pattern. It does not care about any other domain nor event stream. It&rsquo;s sole purpose is to store its domain state as a sequence of events. A well-known example is transactional database systems, which store any state changes in a transaction log. Here, the term &ldquo;event&rdquo; refers more to &ldquo;state change&rdquo;, not only to &ldquo;communicating&rdquo;.</p>
+<p>So any system which uses &ldquo;event sourcing&rdquo; as its core mechanics can be seen as also as an even-driven system, but the opposite is not true in general.</p>
 <h1 id=domain-events-vs-event-sourcing-events>Domain Events vs Event Sourcing Events</h1>
 <p>Domain Events are described as something that happens in the domain and is important to domain experts. Such events typically occur regardless of whether or to what extent the domain is implemented in a software system.</p>
 <p>Examples of Domain Events can be:</p>

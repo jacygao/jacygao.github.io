@@ -12,7 +12,7 @@
 <meta name=apple-mobile-web-app-capable content="yes">
 <meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
 <meta name=author content="Jacy Gao"><meta name=description content="Tech Lead Blogs"><meta name=keywords content="Hugo,blog,tech,architecture,engineering,leadership,Golang">
-<meta name=generator content="Hugo 0.88.1 with theme even">
+<meta name=generator content="Hugo 0.89.1 with theme even">
 <link rel=canonical href=http://localhost:1313/>
 <link href=http://localhost:1313/index.xml rel=alternate type=application/rss+xml title="Jacy Gao">
 <link href=http://localhost:1313/index.xml rel=feed type=application/rss+xml title="Jacy Gao">
@@ -86,7 +86,7 @@
 <section id=posts class=posts>
 <article class=post>
 <header class=post-header>
-<h1 class=post-title><a class=post-link href=/post/event-sourcing/>Demystifying Event Sourcing</a></h1>
+<h1 class=post-title><a class=post-link href=/post/event-sourcing/>Everything I was wrong about Event Sourcing</a></h1>
 <div class=post-meta>
 <span class=post-time> 2021-08-29 </span>
 <div class=post-category>
@@ -94,17 +94,15 @@
 <a href=/categories/events/> Events </a>
 <a href=/categories/ddd/> DDD </a>
 </div>
-<span class=more-meta> 1023 words </span>
-<span class=more-meta> 5 mins read </span>
+<span class=more-meta> 1285 words </span>
+<span class=more-meta> 7 mins read </span>
 </div>
 </header>
 <div class=post-content>
 <div class=post-summary>
-The inspiration behind this blog is from numerous great conversations while working with ThoughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
-Definition I&rsquo;ll start by looking at the definitions.
-Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
-Martin Fowler, 2005:
-&ldquo;Event Sourcing ensures that all changes to application state are stored as a sequence of events.
+Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summerise everything I was wrong about Event Sourcing.
+Event vs State The very first thing i was wrong about Event Sourcing is how I understood the definition of Event Sourcing.
+There are a number of great definitions of Event Sourcing from the internet:
 </div>
 <div class=read-more>
 <a href=/post/event-sourcing/ class=read-more-link>Read more...</a>
