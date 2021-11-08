@@ -1,5 +1,5 @@
 ---
-title: "Demystifying Event Sourcing"
+title: "Everything I was wrong about Event Sourcing"
 date: 2021-08-29T23:20:45+10:00
 draft: false
 tags: ["event-sourcing"]
@@ -7,13 +7,13 @@ categories: ["Architecture", "Events", "DDD"]
 author: "Jacy Gao"
 ---
 
-The inspiration behind this blog is from numerous great conversations while working with ThoughtWorks on a Greenfield International Finance Platform. As I started to gather relevant information from all over the place, I decided to write this blog to organise and share my thoughts.
+Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summerise everything I was wrong about Event Sourcing.
 
-# Definition
+# Event vs State
 
-I'll start by looking at the definitions.
+The very first thing i was wrong about Event Sourcing is how I understood the definition of Event Sourcing.
 
-Martin Fowler and Greg Young have both written great definitions of Event Sourcing:
+There are a number of great definitions of Event Sourcing from the internet:
 
 [Martin Fowler, 2005](https://martinfowler.com/eaaDev/EventSourcing.html):
 
@@ -27,30 +27,42 @@ Another good definition I came cross is in this [Microsoft's article]((https://d
 
 >"Instead of storing just the current state of the data in a domain, use an append-only store to record the full series of actions taken on that data."
 
-Two key words here are "state" and "events". One for my early confusions about Event Sourcing was because I was overly focusing on "events" but overlooked "state". In fact, Event Sourcing, at its core, is about storing and representing "state as events".
+Two key words here are "state" and "event". Although Event Sourcing has the word "event" in its name, at its core, Event Sourcing is a pattern to represent state.
 
-# State as Event vs State from Event
+Event Sourcing provides another way to store application and data state in contrast to CRUD. A sequence of events is the form of its state just like a data record in CRUD.
 
-Typically, state is maintained in a datatbase. Event logs are sometimes emitted when we update the state but the source of truth is the state in the database. Event Sourcing, on the other hand, promotes the event log to be the source of truth. The storage used to keep event logs is often called Event Store. All updates are only appended as new events, and no longer as state changes.
+# State as Event vs Event from State
 
-The double-entry accounting ledger is the primary example of Event Sourcing. Consider the following record of the balance of a bank account:
+Typically, in a CRUD based data storage, state is maintained as individual records in tables. In some systems, event logs are emitted to a logging system by the application when we update the state, but the source of truth is the state in the database. 
+
+In an Event Sourcing based data storage, event logs are promoted to be the source of truth. The storage used to keep these event logs is often called Event Store. All updates are only appended as new events, and no longer as state changes.
+
+Consider the following example of a double-entry accounting ledger. In a CRUD based data storage, a single record holds the current state of an account:
 ```
 Account   BSB      Balance   Date
 4928341   565789   $5280     01-09-2021
 ```
-On every transaction, the account balance needs to be updated. An event log of that transaction is usually stored in a different database table or a separate storage.
+On every transaction, the account balance is updated. In order to keep a full history of transactions, an event log is created and usually stored in a different database table or a separate storage.
 
-With Event Sourcing, data is stored as a sequence of events, as per example below:
+In an Event Store, transactions are appended as a sequence of events, as per example below:
 ```
-Account   BSB      Type     Amount    Description   Date
+Account   BSB      Event    Amount    Description   Date
 4928341   565789   Credit   $5500     Salary        01-09-2021
 4928341   565789   Debit    $100      Resturant     01-09-2021
 4928341   565789   Debit    $20       Uber          01-09-2021
 4928341   565789   Debit    $100      Shopping      01-09-2021
 ```
-Now the event logs are essentially the state of the bank account. By playing all the events in memory, we can get the exactly same current state of the account.
+The event logs are essentially the state of the bank account. By playing all the events in memory, we can get the same current state of the account.
 
-Event Sourcing can be described as "State as Event". It should be differentiated from "State from Events". The distinction is important. “State from Events” consumes events from an existing event stream or event bus, regardless of how it was produced, and projects state from it. This approach is often associated with an Event Driven Architecture and Domain Driven Design.
+In this sense, Event Sourcing can be described as "State as Event". It should be differentiated from "Event from State". The distinction is important. “Event from State” produces an event upon change of a data state. One or many consumers may consume that event, regardless of how it was produced. This approach is commonly implemented in an Event Driven Architecture.
+
+# Event Driven vs Event Sourcing
+
+An Event Driven Architecture can be used for any kind of software system which is based on components communicating mainly or exclusively through events. For example, the creation of a user triggers the creation of a shopping cart. In a domain driven and service oritented architecture world, user and payment may belong to 2 seperate domains. In order to allow user to communicate with payment that a new user has been created, an event is produced to an Event stream. Payment as a consumer subscribes to that event and triggers an action of creating a shopping cart for that user whenever such event is received.
+
+Event sourcing is a more domain specific pattern. It does not care about any other domain nor event stream. It's sole purpose is to store its domain state as a sequence of events. A well-known example is transactional database systems, which store any state changes in a transaction log. Here, the term "event" refers more to "state change", not only to "communicating".
+
+So any system which uses "event sourcing" as its core mechanics can be seen as also as an even-driven system, but the opposite is not true in general.
 
 # Domain Events vs Event Sourcing Events
 
