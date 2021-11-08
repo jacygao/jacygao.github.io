@@ -11,9 +11,9 @@ Many years ago, I implemented a system based on the concept of Event Sourcing. Y
 
 # State vs Event
 
-The very first thing i was wrong about Event Sourcing is how I understood the definition of Event Sourcing.
+The very first thing i was wrong about Event Sourcing is the understanding of its definition.
 
-There are a number of great definitions of Event Sourcing from the internet:
+There are a number of great definitions of Event Sourcing by some great engineers:
 
 [Martin Fowler, 2005](https://martinfowler.com/eaaDev/EventSourcing.html):
 
@@ -29,7 +29,7 @@ Another good definition I came cross is in this [Microsoft's article]((https://d
 
 Two key words here are "state" and "event". Although Event Sourcing has the word "event" in its name, at its core, Event Sourcing is a pattern to represent state.
 
-Event Sourcing provides another way to store application and data state in contrast to CRUD. A sequence of events is the form of its state just like a data record in CRUD.
+Event Sourcing provides another way to store application and data state in contrast to CRUD. A sequence of events is the form of data just like a row in a SQL database with CRUD.
 
 # State as Event vs Event from State
 
