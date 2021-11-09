@@ -1,5 +1,5 @@
 ---
-title: "Everything I was wrong about Event Sourcing"
+title: "Things got me confused about Event Sourcing"
 date: 2021-08-29T23:20:45+10:00
 draft: false
 tags: ["event-sourcing"]
@@ -7,13 +7,13 @@ categories: ["Architecture", "Events", "DDD"]
 author: "Jacy Gao"
 ---
 
-Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. I decided to write up this article to summarise everything I was wrong about Event Sourcing.
+Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. This article talks about everything got me confused about Event Sourcing.
 
 # State vs Event
 
-The very first thing i was wrong about Event Sourcing is the understanding of its definition.
+The very first thing I was confused is the definition of Event Sourcing.
 
-There are a number of great definitions of Event Sourcing by some great engineers:
+Here are some great definitions:
 
 [Martin Fowler, 2005](https://martinfowler.com/eaaDev/EventSourcing.html):
 
@@ -23,17 +23,17 @@ There are a number of great definitions of Event Sourcing by some great engineer
 
 >"Event Sourcing says all state is transient and you only store facts."
 
-Another good definition I came cross is in this [Microsoft's article]((https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)):
+[Microsoft, 2021]((https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)):
 
 >"Instead of storing just the current state of the data in a domain, use an append-only store to record the full series of actions taken on that data."
 
-Two key words here are "state" and "event". Although Event Sourcing has the word "event" in its name, at its core, Event Sourcing is a pattern to represent state.
+Two key words here are "state" and "event". Although Event Sourcing has the word "event" in its name, at its core, Event Sourcing is a pattern of representing state.
 
-Event Sourcing provides another way to store application and data state in contrast to CRUD. A sequence of events is the form of data just like a row in a SQL database with CRUD.
+Event Sourcing provides another way to store application data state in contrast to CRUD. A sequence of events is the form of data just like a row in a SQL database with CRUD.
 
 # State as Event vs Event from State
 
-Typically, in a CRUD based data storage, state is maintained as individual records in tables. In some systems, event logs are emitted to a logging system by the application when we update the state, but the source of truth is the state in the database. 
+Typically, in a CRUD based data storage, state is maintained as individual records in tables. In some applications, event logs are emitted to a logging system by the application when we update the state, but the source of truth is the state in the database. 
 
 In an Event Sourcing based data storage, event logs are promoted to be the source of truth. The storage used to keep these event logs is often called Event Store. All updates are only appended as new events, and no longer as state changes.
 
