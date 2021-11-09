@@ -1,5 +1,5 @@
 ---
-title: "Things got me confused about Event Sourcing"
+title: "Things that got me confused about Event Sourcing"
 date: 2021-08-29T23:20:45+10:00
 draft: false
 tags: ["event-sourcing"]
@@ -7,7 +7,7 @@ categories: ["Architecture", "Events", "DDD"]
 author: "Jacy Gao"
 ---
 
-Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. This article talks about everything got me confused about Event Sourcing.
+Many years ago, I implemented a system based on the concept of Event Sourcing. Years later, I realised my understanding of Event Sourcing had been wrong this whole time. This article talks about everything that got me confused about Event Sourcing.
 
 # State vs Event
 
