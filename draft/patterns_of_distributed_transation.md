@@ -8,4 +8,9 @@ A distributed transaction is a set of operations on data that is performed acros
 
 # Two-Phase Commit Protocol (2PC)
 
-In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented.
+In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction.
+
+The protocol consists 2 phases:
+
+1. commit-request phase, in which the coordinator prepares all partipated processes on their local node. If such process is successfuly on a single node, a "Yes" vote is responded to the coordinator.
+2. commit phase, 
