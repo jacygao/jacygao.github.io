@@ -69,7 +69,7 @@ For example, the creation of a user by the User Service triggers the creation of
 
 In a traditional request-response model, User service inserts a new record to its local database, then calls the order service to create a shopping cart.
 
-![Request Response](req-res-example.png)
+![Request Response](https://jgao.io/req-res-example.png)
 
 However this solution has a few caveats. 
 
@@ -81,7 +81,7 @@ Thirdly, more than one service may be instereted in the User Created event. This
 
 Event Driven Architecture allows requests to be queued until downstream service becomes available. This means that downstreams services now are responsible for process the request. These services don't need to be available when the user creation request is initiated. Furthermore, using an event stream such as Kafka enables PubSub messaging mechanism which allows many consumers react to the same event.
 
-![Event Driven Architecture](event-driven-example.png)
+![Event Driven Architecture](https://jgao.io/event-driven-example.png)
 
 Event sourcing is a more domain specific pattern. It does not care about any other domain nor event stream. It's sole purpose is to store its domain state as a sequence of events. A well-known example is transactional database systems, which store any state changes in a transaction log. Here, the term "event" refers more to "state change", not only to "communicating".
 
