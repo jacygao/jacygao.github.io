@@ -11,11 +11,11 @@ Event Sourcing defines a different way to represent state of the data in a domai
 
 I started working with Event Sourcing over 5 years ago. Many lessons were learned along the journey. This article talks about common pitfalls of Event Sourcing.
 
-# Event Sourcing is not about events
+# Event Sourcing is a data operation model
 
 Event Sourcing is not all about events. Event, in the Event Sourcing context, is the structure of data used to construct the state of a domain object. 
 
-Therefore, in additional to storing events, Event Sourcing is about storing the state of data. Different from a CRUD data operation model where the latest state of a single domain object is maintained, Event Sourcing stores the state of a domain object in any particular time from the creation of the object.
+Therefore, in additional to storing events, Event Sourcing is about the state of data. Different from a CRUD operation model where the latest state of a single domain object is maintained, Event Sourcing stores the state of a domain object in any particular time from the creation of the object.
 
 Consider the following example of a bank account. In a CRUD system, a single record holds the current state of an account:
 ```
@@ -53,13 +53,29 @@ As it can be seen that Event Sourcing represents state through the use of Events
 
 - It enables the ability to restore the data state or roll back changes to a particular time in the past
 
+- It improves write performance as all changes of data are append-only where no complex query or indexing is required.
+
+- It improves read performance by reading materialized view directly from memory
+
 - It fits natually within an event based application. Little additional development effort is required
 
-Event Sourcing, at its core, is about representing state of a domain object. Event is the structure of data used to construct the state at any given time.
+Event Sourcing, at its core, is about representing state of a domain object. Event is the structure of data used to construct the state at any given time. When implementing an Event Soucing system, design around how state can be constructed and represented from events.
 
 # Event Driven is not Event Sourcing
 
-An Event Driven Architecture can be used for any kind of software system which is based on components communicating mainly or exclusively through events. For example, the creation of a user triggers the creation of a shopping cart. In a domain driven and service oritented architecture world, user and payment may belong to 2 seperate domains. In order to allow user to communicate with payment that a new user has been created, an event is produced to an Event stream. Payment as a consumer subscribes to that event and triggers an action of creating a shopping cart for that user whenever such event is received.
+Event Driven Architecture has grown popularity in recent years. This architeture type is based on components communicating asynchronously through events. 
+
+For example, the creation of a user by the User Service triggers the creation of a shopping cart in the Order service. 
+
+In a traditional request-response model, User service inserts a new record to its local database, then calls the order service to create a shopping cart.
+
+![Request Response](/content/image/req-res-example.png)
+
+However this solution has a few caveats. Firstly, the processes of user creation and cart creation should be transactional. In case of any failure either caused by unstable network or data errors, User service is responsible for managing rollback of the newly created user. This adds complexity. Secondly, both User service and Order service must be available for the request to be successful. This cannot be guaranteed when 2 services are maintained by seperate teams. Thirdly, more than one service may be instereted in the User Created event. This adds additional responsibility to the User service to ensure all downstream services can successfully process the request at the same time.
+
+Event Driven Architecture allows requests to be queued until downstream service becomes available. This means that downstreams services now are responsible for process the request. These services don't need to be available when the user creation request is initiated. Furthermore, using an event stream such as Kafka enables PubSub messaging mechanism which allows many consumers react to the same event.
+
+![Event Driven Architecture](/content/image/event-driven-example.png)
 
 Event sourcing is a more domain specific pattern. It does not care about any other domain nor event stream. It's sole purpose is to store its domain state as a sequence of events. A well-known example is transactional database systems, which store any state changes in a transaction log. Here, the term "event" refers more to "state change", not only to "communicating".
 
