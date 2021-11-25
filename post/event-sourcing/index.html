@@ -33,7 +33,7 @@ I started working with Event Sourcing over 5 years ago. Many lessons were learne
 <meta itemprop=description content="Event Sourcing defines a different way to represent state of the data in a domain. Instead of maintaining the latest state of a single domain object in the database (CRUD), Event Sourcing promotes storing a full history of event logs which can be played sequentially to construct the current or past state of a domain object.
 I started working with Event Sourcing over 5 years ago. Many lessons were learned along the journey."><meta itemprop=datePublished content="2021-08-29T23:20:45+10:00">
 <meta itemprop=dateModified content="2021-08-29T23:20:45+10:00">
-<meta itemprop=wordCount content="1619">
+<meta itemprop=wordCount content="1612">
 <meta itemprop=keywords content="event-sourcing,"><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Common Pitfalls of Event Sourcing">
 <meta name=twitter:description content="Event Sourcing defines a different way to represent state of the data in a domain. Instead of maintaining the latest state of a single domain object in the database (CRUD), Event Sourcing promotes storing a full history of event logs which can be played sequentially to construct the current or past state of a domain object.
@@ -100,7 +100,7 @@ I started working with Event Sourcing over 5 years ago. Many lessons were learne
 <a href=/categories/events/> Events </a>
 <a href=/categories/ddd/> DDD </a>
 </div>
-<span class=more-meta> 1619 words </span>
+<span class=more-meta> 1612 words </span>
 <span class=more-meta> 8 mins read </span>
 </div>
 </header>
@@ -235,7 +235,7 @@ WHERE Account = 4928341
 <p>This aspect of Event Sourcing is very powerful but is also dangerous when Event Sourcing is implemented with Commands.</p>
 <p>The difference between Events and Commands is subtle. Often the name of an event is just the past tense of its command.</p>
 <blockquote>
-<p>&ldquo;With a command you tell a system to do X. Events, however, just communicate that something happened - with an event you let a system know that Y has happened.&rdquo; - <a href=https://martinfowler.com/eaaDev/EventNarrative.html>Martin Fowler</a></p>
+<p>&ldquo;With a command you tell a system to do X. Events, with an event you let a system know that Y has happened.&rdquo; - <a href=https://martinfowler.com/eaaDev/EventNarrative.html>Martin Fowler</a></p>
 </blockquote>
 <p>So a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state. Nevertheless, an event is something already happened and that cannot be changed.</p>
 <p>If we look at the same order service example, the actions on the left are potentially commands. These actions can&rsquo;t be simply replayed. For instance replaying <code>Checkout</code> will retrigger OrderCheckedOut event to be consumed by payment service and we cannot guarantee payment service can process it as a replayed event.</p>
