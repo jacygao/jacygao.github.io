@@ -7,15 +7,15 @@ categories: ["Architecture", "Events", "DDD"]
 author: "Jacy Gao"
 ---
 
-Event Sourcing defines a different way to represent state of the data in a domain. Instead of maintaining the latest state of a single domain object in the database(CRUD), Event Sourcing promotes storing a full history of event logs which can be played sequentially to construct the current or past state of a domain object.
+Event Sourcing defines a different way to represent state of the data in a domain. Instead of maintaining the latest state of a single domain object in the database (CRUD), Event Sourcing promotes storing a full history of event logs which can be played sequentially to construct the current or past state of a domain object.
 
 I started working with Event Sourcing over 5 years ago. Many lessons were learned along the journey. This article talks about common pitfalls of Event Sourcing.
 
-# Event Sourcing is a data operation model
+# Event Sourcing is a data model
 
 Event Sourcing is not all about events. Event, in the Event Sourcing context, is the structure of data used to construct the state of a domain object. 
 
-Therefore, in additional to storing events, Event Sourcing is about the state of data. Different from a CRUD operation model where the latest state of a single domain object is maintained, Event Sourcing stores the state of a domain object in any particular time from the creation of the object.
+In additional to storing events, Event Sourcing stores the state of data as events. Different from a CRUD model where only the latest state of a domain object is maintained, Event Sourcing stores the state in any particular time from the creation of a domain object.
 
 Consider the following example of a bank account. In a CRUD system, a single record holds the current state of an account:
 ```
@@ -23,7 +23,7 @@ Account   BSB      Balance   Date
 4928341   565789   $5280     01-09-2021
 ```
 
-When an event occurs such as a withdrawing $100 from this bank account, a CRUD system would do something like this:
+When an event occurs such as a withdrawing $100 from this bank account, a CRUD system can perform and UPDATE operation:
 
 ```
 UPDATE account 
@@ -31,7 +31,7 @@ SET Balance = Balance - 100
 WHERE Account = 4928341
 ```
 
-With CRUD based operation model, as there isn't any event history recorded as part of the change by default, an additional event log is often created and stored in a different database table within a single database transaction.
+With CRUD model, there isn't any event history recorded as part of the change by default. Therefore an additional event log is usually created and stored in a different database table which should also be committed in the same transaction.
 
 Event Sourcing, on the other hand, stores a full series of actions taken on that domain object, as per example below:
 
@@ -57,9 +57,11 @@ As it can be seen that Event Sourcing represents state through the use of Events
 
 - It improves read performance by reading materialized view directly from memory
 
+- It prevents concurrent updates from causing conflicts because it avoids directly updating objects in the database.
+
 - It fits natually within an event based application. Little additional development effort is required
 
-Event Sourcing, at its core, is about representing state of a domain object. Event is the structure of data used to construct the state at any given time. When implementing an Event Soucing system, design around how state can be constructed and represented from events.
+Event Sourcing, at its core, is about representing state of a domain object. Event is the structure of data used to construct the state at any given time. When implementing an Event Sourcing system, design around how states are constructed and represented from events.
 
 # Event Driven is not Event Sourcing
 
@@ -79,11 +81,23 @@ Secondly, both User service and Order service must be available for the request 
 
 Thirdly, more than one service may be instereted in the User Created event. This adds additional responsibility to the User service to ensure all downstream services can successfully process the request at the same time.
 
-Event Driven Architecture allows requests to be queued until downstream service becomes available. This means that downstreams services now are responsible for process the request. These services don't need to be available when the user creation request is initiated. Furthermore, using an event stream such as Kafka enables PubSub messaging mechanism which allows many consumers react to the same event.
+Event Driven Architecture allows requests to be queued until downstream services become available. This means that downstreams services now are responsible for processing the request. These services don't need to be available when user creation request is initiated. Furthermore, using an event stream such as Kafka enables PubSub messaging mechanism which allows many consumers react to the same event.
 
 ![Event Driven Architecture](https://jgao.io/event-driven-example.png)
 
-Event sourcing is a more domain specific pattern. It does not care about any other domain nor event stream. It's sole purpose is to store its domain state as a sequence of events. A well-known example is transactional database systems, which store any state changes in a transaction log. Here, the term "event" refers more to "state change", not only to "communicating".
+All events published to the event stream can be captured and stored centrally in an Event Store. Some event streaming platforms provides an event store out of the box with additional cost. All events can be retrieved later for analytical or auditing purpose.
+
+However, this event store should not be used for Event Sourcing.
+
+Event sourcing is a more domain specific pattern. It does not care about any other domains and it does not require an event stream. It's sole purpose is to store its domain state as a sequence of events.These events are stored to record state changes rather than communicating.
+
+Consider the following example of Event Sourcing:
+
+![Event Sourcing Example](https://jgao.io/event-sourcing-example.png)
+
+In this example, the state of a shopping cart is stored in a local event store as a sequence of events. These events are different from domain events as they are private to the order domain. These events are not intereted by other domains.
+
+However `OrderCheckedOut` is a domain event which is published and consumed by Payment domain.
 
 So any system which uses "event sourcing" as its core mechanics can be seen as also as an even-driven system, but the opposite is not true in general.
 
