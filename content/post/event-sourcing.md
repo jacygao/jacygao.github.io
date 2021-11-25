@@ -132,7 +132,7 @@ This aspect of Event Sourcing is very powerful but is also dangerous when Event 
 
 The difference between Events and Commands is subtle. Often the name of an event is just the past tense of its command. 
 
-> "With a command you tell a system to do X. Events, however, just communicate that something happened - with an event you let a system know that Y has happened." - [Martin Fowler](https://martinfowler.com/eaaDev/EventNarrative.html)
+> "With a command you tell a system to do X. Events, with an event you let a system know that Y has happened." - [Martin Fowler](https://martinfowler.com/eaaDev/EventNarrative.html)
 
 So a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state. Nevertheless, an event is something already happened and that cannot be changed.
 
