@@ -33,7 +33,7 @@ I started working with Event Sourcing over 5 years ago. Many lessons were learne
 <meta itemprop=description content="Event Sourcing defines a different way to represent state of the data in a domain. Instead of maintaining the latest state of a single domain object in the database (CRUD), Event Sourcing promotes storing a full history of event logs which can be played sequentially to construct the current or past state of a domain object.
 I started working with Event Sourcing over 5 years ago. Many lessons were learned along the journey."><meta itemprop=datePublished content="2021-08-29T23:20:45+10:00">
 <meta itemprop=dateModified content="2021-08-29T23:20:45+10:00">
-<meta itemprop=wordCount content="1548">
+<meta itemprop=wordCount content="1619">
 <meta itemprop=keywords content="event-sourcing,"><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Common Pitfalls of Event Sourcing">
 <meta name=twitter:description content="Event Sourcing defines a different way to represent state of the data in a domain. Instead of maintaining the latest state of a single domain object in the database (CRUD), Event Sourcing promotes storing a full history of event logs which can be played sequentially to construct the current or past state of a domain object.
@@ -100,7 +100,7 @@ I started working with Event Sourcing over 5 years ago. Many lessons were learne
 <a href=/categories/events/> Events </a>
 <a href=/categories/ddd/> DDD </a>
 </div>
-<span class=more-meta> 1548 words </span>
+<span class=more-meta> 1619 words </span>
 <span class=more-meta> 8 mins read </span>
 </div>
 </header>
@@ -213,50 +213,41 @@ WHERE Account = 4928341
 <p>However <code>OrderCheckedOut</code> is a domain event which is published and consumed by Payment domain.</p>
 <p>So any system which uses &ldquo;event sourcing&rdquo; as its core mechanics can be seen as also as an even-driven system, but the opposite is not true in general.</p>
 <h1 id=domain-events-vs-event-sourcing-events>Domain Events vs Event Sourcing Events</h1>
-<p>Domain Events are described as something that happens in the domain and is important to domain experts. Such events typically occur regardless of whether or to what extent the domain is implemented in a software system.</p>
+<p>Domain Events are described as something that happens in a domain and is also important to other domains. These events are typically used in Event Driven systems as the communication mechanism between different domains. Domain events can be used as notification to inform something has happened, or state transfer from one domain to another by carrying necessary information as part of the event payload.</p>
 <p>Examples of Domain Events can be:</p>
 <ul>
 <li>UserRegistered</li>
 <li>OrderPlaced</li>
 <li>PaymentDeadlineExpired</li>
 </ul>
-<p>Domain events are typically used for communication and collaboration between domains, such as an event notification to inform something has happened, or state transfer from one domain to another by carrying necessary information as part of the event payload.</p>
-<p>Domain Events are Public Events. These events are published to an event stream for other parts of the system to consume and process.</p>
+<p>Domain Events are Public Events. These events are usually published to an event stream for other parts of the system to consume and process.</p>
 <p>Event Sourcing events, on the other hand, aren&rsquo;t exposed to other domains. These events are usually private events processed within a specific domain. This is also called an aggregate. For example, <code>UserRegistration</code> aggregate could have the following events:</p>
 <ul>
-<li>EmailAddressEntered (<a href=mailto:email@example.com>email@example.com</a>)</li>
-<li>VerificationCodeGenerated (123456)</li>
-<li>EmailAddressValidated</li>
-<li>UserDetailsSubmitted (<code>{firstname: John, lastname: Doe, gender: male, phone: +12345678}</code>)</li>
+<li>10:00 - EmailAddressEntered (<a href=mailto:email@example.com>email@example.com</a>)</li>
+<li>10:05 - VerificationCodeGenerated (123456)</li>
+<li>10:06 - EmailAddressValidated</li>
+<li>10:10 - UserDetailsSubmitted (<code>{firstname: John, lastname: Doe, gender: male, phone: +12345678}</code>)</li>
 </ul>
-<p>By playing the series of events, we have the current state of the user.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>email               ver_code    isValid    details
-email@example.com   123456      true       {firstname: John, lastname: Doe, gender: male, phone: +12345678}
-</code></pre></td></tr></table>
-</div>
-</div><p>In contrast, Event Sourcing Events can be seen as private events. These events live within a specific domain. Domain Events are public events. These events move across domains.</p>
+<p>These events can be replayed to construct the current and past state of the user. As in the above example, the state of User Registration is represented at any given time.</p>
+<p>In contrast, Event Sourcing Events can be seen as private events. These events live within a specific domain. Domain Events are public events. These events move across domains.</p>
 <h1 id=command-sourcing-vs-event-sourcing>Command Sourcing vs Event Sourcing</h1>
-<p>Replayablily is often mentioned as one of the benefits of Event Sourcing. However, many times people are referring to Command Sourcing.</p>
-<p><a href=https://martinfowler.com/eaaDev/EventNarrative.html>Martin Fowler 2006</a>:</p>
+<p><a href="https://youtu.be/STKCRSUsyP0?t=1392">Martin Fowler described</a> a sucessful Event Sourcing system can fully recover an application state from a major failure by replaying the full history of events.</p>
+<p>This aspect of Event Sourcing is very powerful but is also dangerous when Event Sourcing is implemented with Commands.</p>
+<p>The difference between Events and Commands is subtle. Often the name of an event is just the past tense of its command.</p>
 <blockquote>
-<p>&ldquo;With a command you tell a system to do X. Events, however, just communicate that something happened - with an event you let a system know that Y has happened.&rdquo;</p>
+<p>&ldquo;With a command you tell a system to do X. Events, however, just communicate that something happened - with an event you let a system know that Y has happened.&rdquo; - <a href=https://martinfowler.com/eaaDev/EventNarrative.html>Martin Fowler</a></p>
 </blockquote>
-<p>According to the definition from Martin, a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state. Nevertheless, an event is something already happened and that cannot be changed.</p>
-<p>A simple workflow representation of Event Sourcing can be descibed as <code>State -> Event -> State</code>. In this case, the event itself is deterministic. It has all required information to make the state transition.</p>
+<p>So a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state. Nevertheless, an event is something already happened and that cannot be changed.</p>
+<p>If we look at the same order service example, the actions on the left are potentially commands. These actions can&rsquo;t be simply replayed. For instance replaying <code>Checkout</code> will retrigger OrderCheckedOut event to be consumed by payment service and we cannot guarantee payment service can process it as a replayed event.</p>
+<p>However the events on the right side can be replayed because these events are private events to the order service. Any side effects can be well managed within the Order service.</p>
+<p>A simple workflow representation of Event Sourcing can be descibed as <code>State -> Event -> State</code>. In this case, the event itself is deterministic. It has all required information to describe the state transition.</p>
 <p>In contrast, Command Sourcing can be described as <code>State -> Command -> Event</code>. In this case, the command itself does not have all required information to determine a state change but rely on an external input. A consequence of this is that you can&rsquo;t simply replay a stream of logged commands at some arbitrary time and guarantee to get the same outputs as you would if they were handled immediatly.</p>
-<p>The replayablily of Event Sourcing is about replaying the events in an event store, sometimes from a most recent snapshot, to recreate the current state of the records as opposed to replaying the commands in which in that case, is Command Sourcing.</p>
 <h1 id=tldr>TL,DR</h1>
 <ul>
-<li>Event Sourcing is about representing &ldquo;state&rdquo;, events are form of data</li>
-<li>Event Sourcing is about &ldquo;State as Event&rdquo; where Event Driven is about &ldquo;Event from State&rdquo;. Event Driven is not Event Sourcing</li>
+<li>Event Sourcing is about representing &ldquo;state&rdquo;, events are used as data structure</li>
+<li>Event Driven is not Event Sourcing, these two concepts are often implemented independently</li>
 <li>Domain Events are &ldquo;public events&rdquo; that move across domains where Event Sourcing Events are &ldquo;private events&rdquo; that live within a specific domain</li>
-<li>Be very careful with the replayability of Event Sourcing. Often it is misintepreted as something else such as Command Sourcing</li>
+<li>In Event Sourcing, events can be replayed to recover application state from failures but commands cannot be replayed in most cases</li>
 </ul>
 <h1 id=references>References</h1>
 <p><a href=https://martinfowler.com/eaaDev/EventSourcing.html>https://martinfowler.com/eaaDev/EventSourcing.html</a></p>
