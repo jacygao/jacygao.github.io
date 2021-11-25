@@ -12,5 +12,7 @@ In such transaction processing across multiple nodes, a Two-Phase Commit Protoco
 
 The protocol consists 2 phases:
 
-1. commit-request phase, in which the coordinator prepares all partipated processes on their local node. If such process is successfuly on a single node, a "Yes" vote is responded to the coordinator.
-2. commit phase, 
+1. Prepare phase
+In this phase a coordinator node prepares all partipated processes on their local node. If such process is successful on a single node, a "Yes" vote is responded to the coordinator.
+2. Commit phase
+In this phase, the coordinator node sends a commit command to all partipated nodes to commit the prepared processes.
