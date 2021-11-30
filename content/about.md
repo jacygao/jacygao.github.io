@@ -7,4 +7,6 @@ weight: 50
 
 ---
 
-Jacy Gao is a Tech Lead and Software Engineer with over 10 years professional experience.
+Jacy Gao is a Tech Lead and Software Engineer at Microsoft. 
+
+He was formerly a Software Engineer at Electronic Arts working on Need for Speed and The Sims franchises.

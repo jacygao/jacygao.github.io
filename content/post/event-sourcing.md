@@ -95,9 +95,9 @@ Consider the following example of Event Sourcing:
 
 ![Event Sourcing Example](https://jgao.io/event-sourcing-example.png)
 
-In this example, the state of a shopping cart is stored in a local event store as a sequence of events. These events are different from domain events as they are private to the order domain. These events are not intereted by other domains.
+In this example, the state of a shopping cart is stored in a local event store as a sequence of events. These events are different from domain events as they are private to the order domain. These events are not interested by other domains.
 
-However `OrderCheckedOut` is a domain event which is published and consumed by Payment domain.
+Differently, `OrderCheckedOut` is a domain event which is published and consumed by Payment domain.
 
 So any system which uses "event sourcing" as its core mechanics can be seen as also as an even-driven system, but the opposite is not true in general.
 
@@ -128,7 +128,7 @@ In contrast, Event Sourcing Events can be seen as private events. These events l
 
 [Martin Fowler described](https://youtu.be/STKCRSUsyP0?t=1392) a sucessful Event Sourcing system can fully recover an application state from a major failure by replaying the full history of events.
 
-This aspect of Event Sourcing is very powerful but is also dangerous when Event Sourcing is implemented with Commands.
+This aspect of Event Sourcing is very powerful but is also dangerous when Event Sourcing is implemented incorrectly with Commands.
 
 The difference between Events and Commands is subtle. Often the name of an event is just the past tense of its command. 
 
@@ -136,9 +136,9 @@ The difference between Events and Commands is subtle. Often the name of an event
 
 So a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state. Nevertheless, an event is something already happened and that cannot be changed.
 
-If we look at the same order service example, the actions on the left are potentially commands. These actions can't be simply replayed. For instance replaying `Checkout` will retrigger OrderCheckedOut event to be consumed by payment service and we cannot guarantee payment service can process it as a replayed event.
+If we look at the same order service example, the actions on the left are potentially commands. These actions can't be simply replayed. For instance replaying `Checkout` will retrigger `OrderCheckedOut` event to be consumed by payment service and we cannot guarantee payment service can process it as a replayed event.
 
-However the events on the right side can be replayed because these events are private events to the order service. Any side effects can be well managed within the Order service.
+However, the events on the right side can be replayed because these events are private events to the order service. Any side effects can be managed within the Order service.
 
 A simple workflow representation of Event Sourcing can be descibed as `State -> Event -> State`. In this case, the event itself is deterministic. It has all required information to describe the state transition.
 
