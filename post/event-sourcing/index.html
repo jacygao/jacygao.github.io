@@ -209,8 +209,8 @@ WHERE Account = 4928341
 <p>Event sourcing is a more domain specific pattern. It does not care about any other domains and it does not require an event stream. It&rsquo;s sole purpose is to store its domain state as a sequence of events.These events are stored to record state changes rather than communicating.</p>
 <p>Consider the following example of Event Sourcing:</p>
 <p><img src=https://jgao.io/event-sourcing-example.png alt="Event Sourcing Example"></p>
-<p>In this example, the state of a shopping cart is stored in a local event store as a sequence of events. These events are different from domain events as they are private to the order domain. These events are not intereted by other domains.</p>
-<p>However <code>OrderCheckedOut</code> is a domain event which is published and consumed by Payment domain.</p>
+<p>In this example, the state of a shopping cart is stored in a local event store as a sequence of events. These events are different from domain events as they are private to the order domain. These events are not interested by other domains.</p>
+<p>Differently, <code>OrderCheckedOut</code> is a domain event which is published and consumed by Payment domain.</p>
 <p>So any system which uses &ldquo;event sourcing&rdquo; as its core mechanics can be seen as also as an even-driven system, but the opposite is not true in general.</p>
 <h1 id=domain-events-vs-event-sourcing-events>Domain Events vs Event Sourcing Events</h1>
 <p>Domain Events are described as something that happens in a domain and is also important to other domains. These events are typically used in Event Driven systems as the communication mechanism between different domains. Domain events can be used as notification to inform something has happened, or state transfer from one domain to another by carrying necessary information as part of the event payload.</p>
@@ -232,14 +232,14 @@ WHERE Account = 4928341
 <p>In contrast, Event Sourcing Events can be seen as private events. These events live within a specific domain. Domain Events are public events. These events move across domains.</p>
 <h1 id=command-sourcing-vs-event-sourcing>Command Sourcing vs Event Sourcing</h1>
 <p><a href="https://youtu.be/STKCRSUsyP0?t=1392">Martin Fowler described</a> a sucessful Event Sourcing system can fully recover an application state from a major failure by replaying the full history of events.</p>
-<p>This aspect of Event Sourcing is very powerful but is also dangerous when Event Sourcing is implemented with Commands.</p>
+<p>This aspect of Event Sourcing is very powerful but is also dangerous when Event Sourcing is implemented incorrectly with Commands.</p>
 <p>The difference between Events and Commands is subtle. Often the name of an event is just the past tense of its command.</p>
 <blockquote>
 <p>&ldquo;With a command you tell a system to do X. Events, with an event you let a system know that Y has happened.&rdquo; - <a href=https://martinfowler.com/eaaDev/EventNarrative.html>Martin Fowler</a></p>
 </blockquote>
 <p>So a Command is a request made to the system to do something. At this point a lot of things can still happen. It can fail, it can be influenced by external state. Nevertheless, an event is something already happened and that cannot be changed.</p>
-<p>If we look at the same order service example, the actions on the left are potentially commands. These actions can&rsquo;t be simply replayed. For instance replaying <code>Checkout</code> will retrigger OrderCheckedOut event to be consumed by payment service and we cannot guarantee payment service can process it as a replayed event.</p>
-<p>However the events on the right side can be replayed because these events are private events to the order service. Any side effects can be well managed within the Order service.</p>
+<p>If we look at the same order service example, the actions on the left are potentially commands. These actions can&rsquo;t be simply replayed. For instance replaying <code>Checkout</code> will retrigger <code>OrderCheckedOut</code> event to be consumed by payment service and we cannot guarantee payment service can process it as a replayed event.</p>
+<p>However, the events on the right side can be replayed because these events are private events to the order service. Any side effects can be managed within the Order service.</p>
 <p>A simple workflow representation of Event Sourcing can be descibed as <code>State -> Event -> State</code>. In this case, the event itself is deterministic. It has all required information to describe the state transition.</p>
 <p>In contrast, Command Sourcing can be described as <code>State -> Command -> Event</code>. In this case, the command itself does not have all required information to determine a state change but rely on an external input. A consequence of this is that you can&rsquo;t simply replay a stream of logged commands at some arbitrary time and guarantee to get the same outputs as you would if they were handled immediatly.</p>
 <h1 id=tldr>TL,DR</h1>
