@@ -11,7 +11,7 @@ Event Sourcing defines a different way to represent state of the data in a domai
 
 I started working with Event Sourcing over 5 years ago. Many lessons were learned along the journey. This article talks about common pitfalls of Event Sourcing.
 
-# Event Sourcing is a data model
+# Event Sourcing represents the state of data
 
 Event Sourcing is not all about events. Event, in the Event Sourcing context, is the structure of data used to construct the state of a domain object. 
 

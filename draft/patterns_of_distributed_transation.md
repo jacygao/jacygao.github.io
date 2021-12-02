@@ -28,20 +28,29 @@ In this phase, the coordinator node sends a commit command to all partipated nod
 
 - The protocol is complicated to implement which often leads to maintainance overheads
 
-## The CAP Theory
+## The CAP Theorem
 
-As there is no perfect system. As software engineer, one of the most important jobs is to make right trade-offs. The CAP Theory states that any distributed data store can only provide two of the following three guarantees:
+As there is no perfect system. As software engineer, one of the most important jobs is to make right trade-offs. The CAP theorem states that any distributed data store can only provide two of the following three guarantees:
 
 - Consistency, every read receives the the latest state of data
 
 - Availablity, every request receives a response without the guarantee that the data represents the latest state
 
-- Partition Tolerance, system continoue to operate despite messages being dropped or delayed impacted by network between nodes
+- Partition Tolerance, system continue to operate despite messages being dropped or delayed caused by network between nodes
 
-This means that in a distributed transaction where requests sent to multiple nodes must be all or nothing, if a network partition failure occurs, the system needs to decide either cancel the operation in which availablity decreases or proceed with the operation but risk inconsistency.
+This means that in a distributed transaction where requests sent to multiple nodes must be all or nothing. If a network partition failure occurs, the system needs to decide either cancel the operation in which availablity decreases or proceed with the operation but risk inconsistency.
 
-2PC is a CP protocol. It provides strong consistency to allow data modified across multiple nodes but cannot guarantee the availability of the data.
+## Eventual Consistency
+
+
+2PC is a CP protocol. It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. Although 2PC is a general pattern to solve distributed transaction problems, there are other alternative patterns which may fit what you need for your software solution.
 
 # Outbox Pattern
 
+The Outbox Pattern solves the problem when a transaction includes multiple writes to local database and message queues. For example, `CreateUser` command requires both insertion of a user object to the database and publishment of an event `UserCreated` to and event stream.
 
+![outbox-scenario](https://jgao.io/outbox-example-1.png)
+
+In this scenario, both actions performed by the User service needs to consistently succeed or fail. 2PC could be implemented but adds unecessary complexity.
+
+Outbox Pattern provides consistency by using an additional database table as an "Outbox". Messages are added to the Outbox together with the write to the local database
