@@ -42,6 +42,7 @@ This means that in a distributed transaction where requests sent to multiple nod
 
 ## Eventual Consistency
 
+Eventual Consistency guarantees that data being updated will be eventually consistenct. This means that any reads right after writes may not return the newly updated value immediately.
 
 2PC is a CP protocol. It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. Although 2PC is a general pattern to solve distributed transaction problems, there are other alternative patterns which may fit what you need for your software solution.
 
@@ -53,4 +54,4 @@ The Outbox Pattern solves the problem when a transaction includes multiple write
 
 In this scenario, both actions performed by the User service needs to consistently succeed or fail. 2PC could be implemented but adds unecessary complexity.
 
-Outbox Pattern provides consistency by using an additional database table as an "Outbox". Messages are added to the Outbox together with the write to the local database
+Outbox Pattern provides consistency by using an additional database table as an "Outbox". Messages are added to the Outbox together with the write to the local database in the same transaction. The publishment of the messages is managed by a background job - a poller which retrieves newly added messages and push them to the message channel.
