@@ -52,7 +52,7 @@ Eventual Consistency is classified as BASE in contrast to ACID which provides St
 
 - Eventually Consistent, after writes, data will be evetually consistent after some time
 
-2PC is a CP protocol (as in the CAP theorem). It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. There are alternative patterns of distributed transaction using eventual consistency.
+2PC is a CP protocol (as in the CAP theorem). It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. There are alternative patterns of distributed transaction leveraging eventual consistency.
 
 # Outbox Pattern
 
@@ -64,3 +64,6 @@ In this scenario, both actions performed by the User service needs to consistent
 
 Outbox Pattern provides consistency by using an additional database table as an "Outbox". Messages are added to the Outbox table as part of the same database transaction. The publishing of messages is managed by a background job - a poller which retrieves newly added messages and publish them to the message channel.
 
+![outbox-explained](https://jgao.io/outbox-example-2.png)
+
+The design above can ensure that the user record is stored and `UserCreated` event is published consistently leveraging a database feature. However it does have some potential issues. Firstly, any consumer of `UserCreated` event will only receive the event some time after the user record has been inserted. This may cause inconsistency on the UI when data need to be retrieved from API across multiple services. Secondly, the Poller guarantees "at least once delivery" which means that duplicate messages could be published to the channel. For example, if there is a crash after a message has been published but before it has been recorded, when the poller restarts, it will republish the same message. As a result, when using the Outbox pattern, consumers must be idempotent if the application does not wish duplicate messages to be consumed and actioned. One option is to implement a message filter which ignores messages with any existing correlation ID of consumed messages.
