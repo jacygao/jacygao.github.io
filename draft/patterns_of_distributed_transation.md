@@ -42,16 +42,25 @@ This means that in a distributed transaction where requests sent to multiple nod
 
 ## Eventual Consistency
 
-Eventual Consistency guarantees that data being updated will be eventually consistenct. This means that any reads right after writes may not return the newly updated value immediately.
+Eventual Consistency guarantees that data being updated will be eventually consistenct. This means that any reads may not return the most recently updated value immediately. The model is commonly used in distributed computing as it provides a way to gain some level of consistency while maintaining high availability. 
 
-2PC is a CP protocol. It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. Although 2PC is a general pattern to solve distributed transaction problems, there are other alternative patterns which may fit what you need for your software solution.
+Eventual Consistency is classified as BASE in contrast to ACID which provides Strong Consistency. BASE is an acronym of the following terms:
+
+- Basically Available, reads and writes are available as much as possible but may not be consistent
+
+- Soft-state, the current state is a probability without guaranteed consistency
+
+- Eventually Consistent, after writes, data will be evetually consistent after some time
+
+2PC is a CP protocol (as in the CAP theorem). It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. There are alternative patterns of distributed transaction using eventual consistency.
 
 # Outbox Pattern
 
-The Outbox Pattern solves the problem when a transaction includes multiple writes to local database and message queues. For example, `CreateUser` command requires both insertion of a user object to the database and publishment of an event `UserCreated` to and event stream.
+The Outbox Pattern solves the problem when a transaction includes multiple writes to local database and message channels. For example, `CreateUser` command requires both insertion of a user object to the database and publishing of an event `UserCreated` to an event stream.
 
 ![outbox-scenario](https://jgao.io/outbox-example-1.png)
 
-In this scenario, both actions performed by the User service needs to consistently succeed or fail. 2PC could be implemented but adds unecessary complexity.
+In this scenario, both actions performed by the User service needs to consistently succeed or fail. 2PC could be implemented but adds unecessary complexity and affects availability.
 
-Outbox Pattern provides consistency by using an additional database table as an "Outbox". Messages are added to the Outbox together with the write to the local database in the same transaction. The publishment of the messages is managed by a background job - a poller which retrieves newly added messages and push them to the message channel.
+Outbox Pattern provides consistency by using an additional database table as an "Outbox". Messages are added to the Outbox table as part of the same database transaction. The publishing of messages is managed by a background job - a poller which retrieves newly added messages and publish them to the message channel.
+
