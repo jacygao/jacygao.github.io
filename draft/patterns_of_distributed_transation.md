@@ -52,7 +52,7 @@ Eventual Consistency is classified as BASE in contrast to ACID which provides St
 
 - Eventually Consistent, after writes, data will be evetually consistent after some time
 
-2PC is a CP protocol (as in the CAP theorem). It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. There are alternative patterns of distributed transaction leveraging eventual consistency.
+2PC is a CP protocol (as in the CAP theorem). It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. There are alternative patterns to handle distributed transaction leveraging eventual consistency.
 
 # Outbox Pattern
 
@@ -67,3 +67,29 @@ Outbox Pattern provides consistency by using an additional database table as an 
 ![outbox-explained](https://jgao.io/outbox-example-2.png)
 
 The design above can ensure that the user record is stored and `UserCreated` event is published consistently leveraging a database feature. However it does have some potential issues. Firstly, any consumer of `UserCreated` event will only receive the event some time after the user record has been inserted. This may cause inconsistency on the UI when data need to be retrieved from API across multiple services. Secondly, the Poller guarantees "at least once delivery" which means that duplicate messages could be published to the channel. For example, if there is a crash after a message has been published but before it has been recorded, when the poller restarts, it will republish the same message. As a result, when using the Outbox pattern, consumers must be idempotent if the application does not wish duplicate messages to be consumed and actioned. One option is to implement a message filter which ignores messages with any existing correlation ID of consumed messages.
+
+# Event Sourcing Pattern
+
+[Event Sourcing](https://jgao.io/post/event-sourcing/) is one of the best ways to guarantee that event logs are captured when a state of a domain object changes. As a result, it solves the problem when a transaction must update the state while keeping the change event in a persistent data store.
+
+The idea comes from transaction logs in SQL server databases. Transaction logs are critical to databases as they are the actual source of truth of the data. In case of a system failure, transaction logs are used to bring the database back to a consistent state.
+
+For example, in the following scenario, any update to the order requires both writes to the order database and logging in the Event Store. In addition, the order service needs to publish `OrderPlaced` event for the warehouse service to consume. All 3 operations must be consistently succeed or fail. 
+
+![Event Sourcing Example](https://jgao.io/event-sourcing-example-2.png)
+
+In this case, we can use Event Sourcing where only a single record needs to be inserted to the datastore upon a change event. This record is both used to construct the current state of the domain object and stored as event log. The representation of the data is created as a [Materialised View](https://en.wikipedia.org/wiki/Materialized_view) and stored in memory for the frontends to retrieve. Moreover, the Event Store can trigger an action on OrderPlaced event which publishes the event to a message channel.
+
+![Event Sourcing Explained](https://jgao.io/event-sourcing-example-3.png)
+
+- Consider this parttern when the architecture of the system is designed with events
+
+- Unfamiliar pattern to developers
+
+- Added complexity to maintain materialised view. CQRS may need to be adopted to manage complex data requirement from the frontend
+
+# Saga Pattern
+
+# Leader Election
+
+# References
