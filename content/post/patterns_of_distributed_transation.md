@@ -1,7 +1,7 @@
 ---
 title: "Patterns of Distributed Transation"
 date: 2021-12-12T15:13:17+11:00
-draft: true
+draft: false
 tags: ["distributed-transaction", "transaction-outbox", "event-sourcing", "saga", "leader-election", "raft"]
 categories: ["Architecture", "Distributed-Computing"] 
 author: "Jacy Gao"

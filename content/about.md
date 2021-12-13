@@ -16,3 +16,5 @@ In my past life I was a Software Engineer at Electronic Arts and I worked on the
 I was also the engineering lead at PEXA working on PEXA's new international product before I joined Microsoft.
 
 I hold a Bachelor degree of Games Graphics Programming and a Master degree of Business Information Technology from RMIT University in Melbourne Australia.
+
+The opinions I express on my blog posts are my own personal views, not that of the institutions I work for.
