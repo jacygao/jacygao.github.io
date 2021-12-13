@@ -1,0 +1,282 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Patterns of Distributed Transation - Jacy Gao</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Jacy Gao"><meta name=description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 seperate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
+Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction."><meta name=keywords content="Hugo,blog,tech,architecture,engineering,leadership,Golang">
+<meta name=generator content="Hugo 0.90.1 with theme even">
+<link rel=canonical href=http://jgao.io/post/patterns_of_distributed_transation/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<link href=/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Patterns of Distributed Transation">
+<meta property="og:description" content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 seperate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
+Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://jgao.io/post/patterns_of_distributed_transation/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-12-12T15:13:17+11:00">
+<meta property="article:modified_time" content="2021-12-12T15:13:17+11:00">
+<meta itemprop=name content="Patterns of Distributed Transation">
+<meta itemprop=description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 seperate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
+Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction."><meta itemprop=datePublished content="2021-12-12T15:13:17+11:00">
+<meta itemprop=dateModified content="2021-12-12T15:13:17+11:00">
+<meta itemprop=wordCount content="1123">
+<meta itemprop=keywords content="distributed-transaction,transaction-outbox,event-sourcing,saga,leader-election,raft,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Patterns of Distributed Transation">
+<meta name=twitter:description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 seperate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
+Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Jacy Gao</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>Home</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>Archives</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>Tags</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>Categories</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>About</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Jacy Gao</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>Home</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>Archives</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>Tags</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>Categories</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>About</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Patterns of Distributed Transation</h1>
+<div class=post-meta>
+<span class=post-time> 2021-12-12 </span>
+<div class=post-category>
+<a href=/categories/architecture/> Architecture </a>
+<a href=/categories/distributed-computing/> Distributed-Computing </a>
+</div>
+<span class=more-meta> 1123 words </span>
+<span class=more-meta> 6 mins read </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>Contents</h2>
+<div class="post-toc-content always-active">
+<nav id=TableOfContents>
+<ul>
+<li><a href=#two-phase-commit-protocol-2pc>Two-Phase Commit Protocol (2PC)</a>
+<ul>
+<li><a href=#the-cap-theorem>The CAP Theorem</a></li>
+<li><a href=#eventual-consistency>Eventual Consistency</a></li>
+</ul>
+</li>
+<li><a href=#outbox-pattern>Outbox Pattern</a></li>
+<li><a href=#event-sourcing-pattern>Event Sourcing Pattern</a></li>
+<li><a href=#coming-next>Coming Next</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<p>A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 seperate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.</p>
+<h1 id=two-phase-commit-protocol-2pc>Two-Phase Commit Protocol (2PC)</h1>
+<p>In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction.</p>
+<p>The protocol consists 2 phases:</p>
+<ol>
+<li>
+<p>Prepare phase
+In this phase a coordinator node prepares all partipated processes on their local node. If such process is successful on a single node, a &ldquo;Yes&rdquo; vote is responded to the coordinator.</p>
+</li>
+<li>
+<p>Commit phase
+In this phase, the coordinator node sends a commit command to all partipated nodes to commit the prepared processes.</p>
+</li>
+</ol>
+<p><img src=https://jgao.io/2pc-example.png alt="2pc example"></p>
+<p>2PC is a strongly consistent protocol with trade in availability. During the 2PC stage, data records from all participants must be locked to prevent conflicts from concurrent writes. This trade-off introduces a number of issues:</p>
+<ul>
+<li>
+<p>Some failures can result in deadlock leading to some participants never being able to resolve their transactions</p>
+</li>
+<li>
+<p>After participants send an agreement message to the coordinator, data is blocked until a commit or rollback is received. This can be very expensive and cause performance bottleneck</p>
+</li>
+<li>
+<p>The protocol is complicated to implement which often leads to maintainance overheads</p>
+</li>
+</ul>
+<h2 id=the-cap-theorem>The CAP Theorem</h2>
+<p>As there is no perfect system. As software engineer, one of the most important jobs is to make right trade-offs. The CAP theorem states that any distributed data store can only provide two of the following three guarantees:</p>
+<ul>
+<li>
+<p>Consistency, every read receives the the latest state of data</p>
+</li>
+<li>
+<p>Availablity, every request receives a response without the guarantee that the data represents the latest state</p>
+</li>
+<li>
+<p>Partition Tolerance, system continue to operate despite messages being dropped or delayed caused by network between nodes</p>
+</li>
+</ul>
+<p>This means that in a distributed transaction where requests sent to multiple nodes must be all or nothing. If a network partition failure occurs, the system needs to decide either cancel the operation in which availablity decreases or proceed with the operation but risk inconsistency.</p>
+<h2 id=eventual-consistency>Eventual Consistency</h2>
+<p>Eventual Consistency guarantees that data being updated will be eventually consistenct. This means that any reads may not return the most recently updated value immediately. The model is commonly used in distributed computing as it provides a way to gain some level of consistency while maintaining high availability.</p>
+<p>Eventual Consistency is classified as BASE in contrast to ACID which provides Strong Consistency. BASE is an acronym of the following terms:</p>
+<ul>
+<li>
+<p>Basically Available, reads and writes are available as much as possible but may not be consistent</p>
+</li>
+<li>
+<p>Soft-state, the current state is a probability without guaranteed consistency</p>
+</li>
+<li>
+<p>Eventually Consistent, after writes, data will be evetually consistent after some time</p>
+</li>
+</ul>
+<p>2PC is a CP protocol (as in the CAP theorem). It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. There are alternative patterns to handle distributed transaction leveraging eventual consistency.</p>
+<h1 id=outbox-pattern>Outbox Pattern</h1>
+<p>The Outbox Pattern solves the problem when a transaction includes multiple writes to local database and message channels. For example, <code>CreateUser</code> command requires both insertion of a user object to the database and publishing of an event <code>UserCreated</code> to an event stream.</p>
+<p><img src=https://jgao.io/outbox-example-1.png alt=outbox-scenario></p>
+<p>In this scenario, both actions performed by the User service needs to consistently succeed or fail. 2PC could be implemented but adds unecessary complexity and affects availability.</p>
+<p>Outbox Pattern provides consistency by using an additional database table as an &ldquo;Outbox&rdquo;. Messages are added to the Outbox table as part of the same database transaction. The publishing of messages is managed by a background job - a poller which retrieves newly added messages and publish them to the message channel.</p>
+<p><img src=https://jgao.io/outbox-example-2.png alt=outbox-explained></p>
+<p>The design above can ensure that the user record is stored and <code>UserCreated</code> event is published consistently leveraging a database feature. However it does have some potential issues. Firstly, any consumer of <code>UserCreated</code> event will only receive the event some time after the user record has been inserted. This may cause inconsistency on the UI when data need to be retrieved from API across multiple services. Secondly, the Poller guarantees &ldquo;at least once delivery&rdquo; which means that duplicate messages could be published to the channel. For example, if there is a crash after a message has been published but before it has been recorded, when the poller restarts, it will republish the same message. As a result, when using the Outbox pattern, consumers must be idempotent if the application does not wish duplicate messages to be consumed and actioned. One option is to implement a message filter which ignores messages with any existing correlation ID of consumed messages.</p>
+<h1 id=event-sourcing-pattern>Event Sourcing Pattern</h1>
+<p><a href=https://jgao.io/post/event-sourcing/>Event Sourcing</a> is one of the best ways to guarantee that event logs are captured when a state of a domain object changes. As a result, it solves the problem when a transaction must update the state while keeping the change event in a persistent data store.</p>
+<p>The idea comes from transaction logs in SQL server databases. Transaction logs are critical to databases as they are the actual source of truth of the data. In case of a system failure, transaction logs are used to bring the database back to a consistent state.</p>
+<p>For example, in the following scenario, any update to the order requires both writes to the order database and logging in the Event Store. In addition, the order service needs to publish <code>OrderPlaced</code> event for the warehouse service to consume. All 3 operations must be consistently succeed or fail.</p>
+<p><img src=https://jgao.io/event-sourcing-example-2.png alt="Event Sourcing Example"></p>
+<p>In this case, we can use Event Sourcing where only a single record needs to be inserted to the datastore upon a change event. This record is both used to construct the current state of the domain object and stored as event log. The representation of the data is created as a <a href=https://en.wikipedia.org/wiki/Materialized_view>Materialised View</a> and stored in memory for the frontends to retrieve. Moreover, the Event Store can trigger an action on OrderPlaced event which publishes the event to a message channel. Alternatively, the publishing of events can also be managed using a poller.</p>
+<p><img src=https://jgao.io/event-sourcing-example-3.png alt="Event Sourcing Explained"></p>
+<p>Event Sourcing parttern is a great fit when the architecture of the application is designed around events. However, this pattern faces a number of challenges:</p>
+<ul>
+<li>
+<p>Unfamiliar pattern to developers which may lead to a long learning curve</p>
+</li>
+<li>
+<p>Added complexity to maintain materialised view. CQRS may need to be adopted to handle complex data requirements by the frontend</p>
+</li>
+<li>
+<p>Eventual consistency may not suitable for applications that require real-time updates to the views.</p>
+</li>
+</ul>
+<h1 id=coming-next>Coming Next</h1>
+<ul>
+<li>Saga Pattern</li>
+<li>Leader Election Pattern</li>
+</ul>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>Author</span>
+<span class=item-content>Jacy Gao</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>LastMod</span>
+<span class=item-content>
+2021-12-12
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/distributed-transaction/>distributed-transaction</a>
+<a href=/tags/transaction-outbox/>transaction-outbox</a>
+<a href=/tags/event-sourcing/>event-sourcing</a>
+<a href=/tags/saga/>saga</a>
+<a href=/tags/leader-election/>leader-election</a>
+<a href=/tags/raft/>raft</a>
+</div>
+<nav class=post-nav>
+<a class=next href=/post/event-sourcing/>
+<span class="next-text nav-default">Common Pitfalls of Event Sourcing</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-12-12 15:13:17 \u002b1100 \u002b1100',title:'Patterns of Distributed Transation',clientID:'89ea4f44b828efc1f114',clientSecret:'2b3c6fec7fc4ffea74da02548b6806227b9be52e',repo:'jacygao.github.io',owner:'jacygao',admin:['jacygao'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=mailto:aus.jacy@email.com class="iconfont icon-email" title=email></a>
+<a href=https://www.linkedin.com/in/jacy-gao-45311551/ class="iconfont icon-linkedin" title=linkedin></a>
+<a href=https://github.com/jacygao class="iconfont icon-github" title=github></a>
+<a href=http://jgao.io/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a>
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<span class=copyright-year>
+&copy;
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Jacy Gao</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>
