@@ -7,6 +7,12 @@ weight: 50
 
 ---
 
-Jacy Gao is a Tech Lead and Software Engineer at Microsoft. 
+Hello World!
 
-He was formerly a Software Engineer at Electronic Arts working on Need for Speed and The Sims franchises.
+My name is Jacy and I'm currently as a Senior Software Engineer at Microsoft.
+
+In my past life I was a Software Engineer at Electronic Arts and I worked on the popular Need for Speed and The Sims franchises.
+
+I was also the engineering lead at PEXA working on PEXA's new international product before I joined Microsoft.
+
+I hold a Bachelor degree of Games Graphics Programming and a Master degree of Business Information Technology from RMIT University in Melbourne Australia.

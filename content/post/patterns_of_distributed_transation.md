@@ -1,7 +1,10 @@
 ---
 title: "Patterns of Distributed Transation"
-date: 2021-11-10T15:13:17+11:00
+date: 2021-12-12T15:13:17+11:00
 draft: true
+tags: ["distributed-transaction", "transaction-outbox", "event-sourcing", "saga", "leader-election", "raft"],
+categories: ["Architecture", "Distributed-Computing"] 
+author: "Jacy Gao"
 ---
 
 A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 seperate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
@@ -78,18 +81,18 @@ For example, in the following scenario, any update to the order requires both wr
 
 ![Event Sourcing Example](https://jgao.io/event-sourcing-example-2.png)
 
-In this case, we can use Event Sourcing where only a single record needs to be inserted to the datastore upon a change event. This record is both used to construct the current state of the domain object and stored as event log. The representation of the data is created as a [Materialised View](https://en.wikipedia.org/wiki/Materialized_view) and stored in memory for the frontends to retrieve. Moreover, the Event Store can trigger an action on OrderPlaced event which publishes the event to a message channel.
+In this case, we can use Event Sourcing where only a single record needs to be inserted to the datastore upon a change event. This record is both used to construct the current state of the domain object and stored as event log. The representation of the data is created as a [Materialised View](https://en.wikipedia.org/wiki/Materialized_view) and stored in memory for the frontends to retrieve. Moreover, the Event Store can trigger an action on OrderPlaced event which publishes the event to a message channel. Alternatively, the publishing of events can also be managed using a poller.
 
 ![Event Sourcing Explained](https://jgao.io/event-sourcing-example-3.png)
 
-- Consider this parttern when the architecture of the system is designed with events
+Event Sourcing parttern is a great fit when the architecture of the application is designed around events. However, this pattern faces a number of challenges:
 
-- Unfamiliar pattern to developers
+- Unfamiliar pattern to developers which may lead to a long learning curve
 
-- Added complexity to maintain materialised view. CQRS may need to be adopted to manage complex data requirement from the frontend
+- Added complexity to maintain materialised view. CQRS may need to be adopted to handle complex data requirements by the frontend
 
-# Saga Pattern
+- Eventual consistency may not suitable for applications that require real-time updates to the views.
 
-# Leader Election
-
-# References
+# Coming Next
+- Saga Pattern
+- Leader Election Pattern
