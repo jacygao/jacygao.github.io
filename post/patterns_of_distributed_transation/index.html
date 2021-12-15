@@ -33,7 +33,7 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 <meta itemprop=description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
 Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction."><meta itemprop=datePublished content="2021-12-12T15:13:17+11:00">
 <meta itemprop=dateModified content="2021-12-12T15:13:17+11:00">
-<meta itemprop=wordCount content="1119">
+<meta itemprop=wordCount content="1511">
 <meta itemprop=keywords content="distributed-transaction,transaction-outbox,event-sourcing,saga,leader-election,raft,"><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Patterns of Distributed Transaction">
 <meta name=twitter:description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
@@ -99,8 +99,8 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 <a href=/categories/architecture/> Architecture </a>
 <a href=/categories/distributed-computing/> Distributed-Computing </a>
 </div>
-<span class=more-meta> 1119 words </span>
-<span class=more-meta> 6 mins read </span>
+<span class=more-meta> 1511 words </span>
+<span class=more-meta> 8 mins read </span>
 </div>
 </header>
 <div class=post-toc id=post-toc>
@@ -116,6 +116,13 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 </li>
 <li><a href=#outbox-pattern>Outbox Pattern</a></li>
 <li><a href=#event-sourcing-pattern>Event Sourcing Pattern</a></li>
+<li><a href=#saga-pattern>Saga Pattern</a>
+<ul>
+<li><a href=#choreography>Choreography</a></li>
+<li><a href=#orchestration>Orchestration</a></li>
+<li><a href=#failures-and-rollback>Failures and Rollback</a></li>
+</ul>
+</li>
 <li><a href=#coming-next>Coming Next</a></li>
 </ul>
 </nav>
@@ -204,9 +211,27 @@ In this phase, the coordinator node sends a commit command to all participated n
 <p>Eventual consistency may not be suitable for applications that require real-time updates to the views.</p>
 </li>
 </ul>
+<h1 id=saga-pattern>Saga Pattern</h1>
+<p>Saga solves the problem when a workflow of business transactions span multiple services or systems must be performed consistently. For example, a successfuly order process involves order placement, stock update, payment and delivery. Each step is managed by a separate service with its own local database.</p>
+<p><img src=https://jgao.io/saga-example-1.png alt="Saga Example"></p>
+<p>The steps of the order process essentially form a workflow. In a real life scenario, any step could fail. If there isn&rsquo;t an automated way to recover such a system from failure, the cost of maintanance will be significant.</p>
+<p>Saga uses a message channel to coordinate all services involved in a workflow. For large systems a event stream is often used where for small applciations a message queue can be sufficient.</p>
+<p>There are 2 types of coordinations in Saga, Choreography and Orchestration.</p>
+<h2 id=choreography>Choreography</h2>
+<p>In a Choreography Saga, services coordinate by communicating directly with each other via a message channel.</p>
+<p><img src=https://jgao.io/saga-choreography-example.png alt="Saga Choreography Example"></p>
+<p>The Choreorgraphy Saga is more suitable for simple workflows with few participants. It can be confusing to add more services to the Saga once deployed. It is also difficult to get an overview of what is happenning during an end-to-end transaction since there isn&rsquo;t a coordinator.</p>
+<h2 id=orchestration>Orchestration</h2>
+<p>In an Orchestration Saga, services are coordinated by an orchestator.</p>
+<p><img src=https://jgao.io/saga-orchestration-example.png alt="Saga Orchestration Example"></p>
+<p>The Orchestration Saga is more complex to implement. Also, the Orchestrator becomes a single point of failure. Nevertheless, it is much easier to add or remove steps as the orchestrator centrally controls the flow of activities. The status of workflow can be tracked in the Orchestrator. Services become more loosely coupled as they do not need to communicate to any other services other than the Orchestrator.</p>
+<h2 id=failures-and-rollback>Failures and Rollback</h2>
+<p>When a step of a workflow fails, there are a number of ways to recover the Saga from a failure.</p>
+<p>Firstly, services can retry the same message in case of any transient failures. To support retry, the implementation of message consumers must provide idempotence to ensure the consistency of data.</p>
+<p>Secondly, the workflow can be rolled back from the failed step. The previous steps can either roll back or compensate the changes where applicable. However, the data already been committed to the local database of a service can&rsquo;t be rolled back.</p>
+<p>Thirdly, in some situations, the workflow can go into a pending state. An operator can be alerted to fix the broken step and resume the workflow via an admin interface.</p>
 <h1 id=coming-next>Coming Next</h1>
 <ul>
-<li>Saga Pattern</li>
 <li>Leader Election Pattern</li>
 </ul>
 </div>
