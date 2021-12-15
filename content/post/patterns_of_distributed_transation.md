@@ -95,15 +95,15 @@ Event Sourcing pattern is a great fit when the architecture of the application i
 
 # Saga Pattern
 
-Saga solves the problem when a workflow of business transactions span multiple services or systems must be performed consistently. For example, a successfuly order process involves order placement, stock update, payment and delivery. Each step is managed by a separate service with its own local database.
+Saga solves the problem when a workflow of business transactions span multiple services or systems must be performed consistently. For example, a successful order process involves order placement, stock update, payment and delivery. Each step is managed by a separate service with its own local database.
 
 ![Saga Example](https://jgao.io/saga-example-1.png)
 
-The steps of the order process essentially form a workflow. In a real life scenario, any step could fail. If there isn't an automated way to recover such a system from failure, the cost of maintanance will be significant.
+The steps of the order process essentially form a workflow. In a real life scenario, any step could fail. If there isn't an automated way to recover such a system from failure, the cost of maintenance will be significant.
 
-Saga uses a message channel to coordinate all services involved in a workflow. For large systems a event stream is often used where for small applciations a message queue can be sufficient.
+Saga uses a message channel to coordinate all services involved in a workflow. For large systems an event stream is often used where for small applications a message queue can be sufficient.
 
-There are 2 types of coordinations in Saga, Choreography and Orchestration.
+There are 2 types of coordination in Saga, Choreography and Orchestration.
 
 ## Choreography
 
@@ -111,11 +111,11 @@ In a Choreography Saga, services coordinate by communicating directly with each 
 
 ![Saga Choreography Example](https://jgao.io/saga-choreography-example.png)
 
-The Choreorgraphy Saga is more suitable for simple workflows with few participants. It can be confusing to add more services to the Saga once deployed. It is also difficult to get an overview of what is happenning during an end-to-end transaction since there isn't a coordinator.
+The Choreography Saga is more suitable for simple workflows with few participants. It can be confusing to add more services to the Saga once deployed. It is also difficult to get an overview of what is happening during an end-to-end transaction since there isn't a coordinator.
 
 ## Orchestration
 
-In an Orchestration Saga, services are coordinated by an orchestator.
+In an Orchestration Saga, services are coordinated by an orchestrator.
 
 ![Saga Orchestration Example](https://jgao.io/saga-orchestration-example.png)
 
