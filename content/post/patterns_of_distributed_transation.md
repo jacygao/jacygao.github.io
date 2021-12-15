@@ -93,6 +93,43 @@ Event Sourcing pattern is a great fit when the architecture of the application i
 
 - Eventual consistency may not be suitable for applications that require real-time updates to the views.
 
+# Saga Pattern
+
+Saga solves the problem when a workflow of business transactions span multiple services or systems must be performed consistently. For example, a successfuly order process involves order placement, stock update, payment and delivery. Each step is managed by a separate service with its own local database.
+
+![Saga Example](https://jgao.io/saga-example-1.png)
+
+The steps of the order process essentially form a workflow. In a real life scenario, any step could fail. If there isn't an automated way to recover such a system from failure, the cost of maintanance will be significant.
+
+Saga uses a message channel to coordinate all services involved in a workflow. For large systems a event stream is often used where for small applciations a message queue can be sufficient.
+
+There are 2 types of coordinations in Saga, Choreography and Orchestration.
+
+## Choreography
+
+In a Choreography Saga, services coordinate by communicating directly with each other via a message channel.
+
+![Saga Choreography Example](https://jgao.io/saga-choreography-example.png)
+
+The Choreorgraphy Saga is more suitable for simple workflows with few participants. It can be confusing to add more services to the Saga once deployed. It is also difficult to get an overview of what is happenning during an end-to-end transaction since there isn't a coordinator.
+
+## Orchestration
+
+In an Orchestration Saga, services are coordinated by an orchestator.
+
+![Saga Orchestration Example](https://jgao.io/saga-orchestration-example.png)
+
+The Orchestration Saga is more complex to implement. Also, the Orchestrator becomes a single point of failure. Nevertheless, it is much easier to add or remove steps as the orchestrator centrally controls the flow of activities. The status of workflow can be tracked in the Orchestrator. Services become more loosely coupled as they do not need to communicate to any other services other than the Orchestrator.
+
+## Failures and Rollback
+
+When a step of a workflow fails, there are a number of ways to recover the Saga from a failure. 
+
+Firstly, services can retry the same message in case of any transient failures. To support retry, the implementation of message consumers must provide idempotence to ensure the consistency of data.
+
+Secondly, the workflow can be rolled back from the failed step. The previous steps can either roll back or compensate the changes where applicable. However, the data already been committed to the local database of a service can't be rolled back.
+
+Thirdly, in some situations, the workflow can go into a pending state. An operator can be alerted to fix the broken step and resume the workflow via an admin interface.
+
 # Coming Next
-- Saga Pattern
 - Leader Election Pattern
