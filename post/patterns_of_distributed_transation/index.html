@@ -33,7 +33,7 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 <meta itemprop=description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
 Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction."><meta itemprop=datePublished content="2021-12-12T15:13:17+11:00">
 <meta itemprop=dateModified content="2021-12-12T15:13:17+11:00">
-<meta itemprop=wordCount content="1797">
+<meta itemprop=wordCount content="1798">
 <meta itemprop=keywords content="distributed-transaction,transaction-outbox,event-sourcing,saga,leader-election,raft,"><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Patterns of Distributed Transaction">
 <meta name=twitter:description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
@@ -99,7 +99,7 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 <a href=/categories/architecture/> Architecture </a>
 <a href=/categories/distributed-computing/> Distributed-Computing </a>
 </div>
-<span class=more-meta> 1797 words </span>
+<span class=more-meta> 1798 words </span>
 <span class=more-meta> 9 mins read </span>
 </div>
 </header>
@@ -250,10 +250,10 @@ In this phase, the coordinator node sends a commit command to all participated n
 <p>There are a few things to watch out for when using this pattern:</p>
 <ul>
 <li>
-<p>Retry interval should be defined in the message metadata to avoid excessive retry requests sent to the integrated systems by the consumers. Consider having an exponential backoff based on the number of attempts</p>
+<p>Message retry interval needs to be well managed to avoid excessive retry requests sent to the integrated systems by the consumers. Consider implementing an exponential backoff based on the number of attempts</p>
 </li>
 <li>
-<p>The integrated systems should support idempotence. It is possible that the same request is sent again by the consumer as systems could fail after a successful response but before it is added to the reply channel</p>
+<p>The integrated systems should support idempotence. It is possible that the same request is sent more than once by the consumer as systems could fail after a successful response but before it is added to the reply channel</p>
 </li>
 </ul>
 <h1 id=coming-next>Coming Next</h1>
