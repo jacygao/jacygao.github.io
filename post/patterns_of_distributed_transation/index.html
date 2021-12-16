@@ -33,7 +33,7 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 <meta itemprop=description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
 Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction."><meta itemprop=datePublished content="2021-12-12T15:13:17+11:00">
 <meta itemprop=dateModified content="2021-12-12T15:13:17+11:00">
-<meta itemprop=wordCount content="1511">
+<meta itemprop=wordCount content="1797">
 <meta itemprop=keywords content="distributed-transaction,transaction-outbox,event-sourcing,saga,leader-election,raft,"><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Patterns of Distributed Transaction">
 <meta name=twitter:description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
@@ -99,8 +99,8 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 <a href=/categories/architecture/> Architecture </a>
 <a href=/categories/distributed-computing/> Distributed-Computing </a>
 </div>
-<span class=more-meta> 1511 words </span>
-<span class=more-meta> 8 mins read </span>
+<span class=more-meta> 1797 words </span>
+<span class=more-meta> 9 mins read </span>
 </div>
 </header>
 <div class=post-toc id=post-toc>
@@ -123,6 +123,7 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 <li><a href=#failures-and-rollback>Failures and Rollback</a></li>
 </ul>
 </li>
+<li><a href=#reliability-queue-pattern>Reliability Queue Pattern</a></li>
 <li><a href=#coming-next>Coming Next</a></li>
 </ul>
 </nav>
@@ -230,6 +231,31 @@ In this phase, the coordinator node sends a commit command to all participated n
 <p>Firstly, services can retry the same message in case of any transient failures. To support retry, the implementation of message consumers must provide idempotence to ensure the consistency of data.</p>
 <p>Secondly, the workflow can be rolled back from the failed step. The previous steps can either roll back or compensate the changes where applicable. However, the data already been committed to the local database of a service can&rsquo;t be rolled back.</p>
 <p>Thirdly, in some situations, the workflow can go into a pending state. An operator can be alerted to fix the broken step and resume the workflow via an admin interface.</p>
+<h1 id=reliability-queue-pattern>Reliability Queue Pattern</h1>
+<p>A series of transactions must all succeed or fail can be broken into a list of sequential tasks. These tasks can be put onto a message queue to improve reliability. Competing Consumers can be implemented to allow horizontal scalability for processing large amount of tasks concurrently.</p>
+<p>For example, a payment integration requires a list of calls to different API endpoints sequentially to complete the payment process.</p>
+<p><img src=https://jgao.io/reliability-queue-use-case.png alt="reliability queue use case"></p>
+<p>In this business scenario, 2 types of failures could happen:</p>
+<ul>
+<li>
+<p>Transient failure, either caused by unstable network or downtime of the Payment Gateway</p>
+</li>
+<li>
+<p>Data logic failure, caused by invalid data type, structure or value in the request sent to the Payment Gateway</p>
+</li>
+</ul>
+<p>To recover from these failures, a reliability queue can be used to mitigate transient failures and allow invalid data to be repaired.</p>
+<p><img src=https://jgao.io/reliability-queue-example.png alt="reliability queue example"></p>
+<p>This design transforms the integration into a sequence of tasks. By using a message channel, it decouples the coordination logic from the message delivery. It also improves reliability and resiliency as requests will not be lost upon consumer failure or network outages. In case of data logic failure, a message filter can be implemented alongside the consumer logic to filter and fix malformed messages before it is actioned by the consumers.</p>
+<p>There are a few things to watch out for when using this pattern:</p>
+<ul>
+<li>
+<p>Retry interval should be defined in the message metadata to avoid excessive retry requests sent to the integrated systems by the consumers. Consider having an exponential backoff based on the number of attempts</p>
+</li>
+<li>
+<p>The integrated systems should support idempotence. It is possible that the same request is sent again by the consumer as systems could fail after a successful response but before it is added to the reply channel</p>
+</li>
+</ul>
 <h1 id=coming-next>Coming Next</h1>
 <ul>
 <li>Leader Election Pattern</li>
