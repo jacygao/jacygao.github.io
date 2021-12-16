@@ -153,9 +153,9 @@ This design transforms the integration into a sequence of tasks. By using a mess
 
 There are a few things to watch out for when using this pattern:
 
-- Retry interval should be defined in the message metadata to avoid excessive retry requests sent to the integrated systems by the consumers. Consider having an exponential backoff based on the number of attempts
+- Message retry interval needs to be well managed to avoid excessive retry requests sent to the integrated systems by the consumers. Consider implementing an exponential backoff based on the number of attempts
 
-- The integrated systems should support idempotence. It is possible that the same request is sent again by the consumer as systems could fail after a successful response but before it is added to the reply channel
+- The integrated systems should support idempotence. It is possible that the same request is sent more than once by the consumer as systems could fail after a successful response but before it is added to the reply channel
 
 # Coming Next
 - Leader Election Pattern
