@@ -131,5 +131,31 @@ Secondly, the workflow can be rolled back from the failed step. The previous ste
 
 Thirdly, in some situations, the workflow can go into a pending state. An operator can be alerted to fix the broken step and resume the workflow via an admin interface.
 
+# Reliability Queue Pattern
+
+A series of transactions must all succeed or fail can be broken into a list of sequential tasks. These tasks can be put onto a message queue to improve reliability. Competing Consumers can be implemented to allow horizontal scalability for processing large amount of tasks concurrently.
+
+For example, a payment integration requires a list of calls to different API endpoints sequentially to complete the payment process.
+
+![reliability queue use case](https://jgao.io/reliability-queue-use-case.png)
+
+In this business scenario, 2 types of failures could happen:
+
+- Transient failure, either caused by unstable network or downtime of the Payment Gateway
+
+- Data logic failure, caused by invalid data type, structure or value in the request sent to the Payment Gateway
+
+To recover from these failures, a reliability queue can be used to mitigate transient failures and allow invalid data to be repaired.
+
+![reliability queue example](https://jgao.io/reliability-queue-example.png)
+
+This design transforms the integration into a sequence of tasks. By using a message channel, it decouples the coordination logic from the message delivery. It also improves reliability and resiliency as requests will not be lost upon consumer failure or network outages. In case of data logic failure, a message filter can be implemented alongside the consumer logic to filter and fix malformed messages before it is actioned by the consumers.
+
+There are a few things to watch out for when using this pattern:
+
+- Retry interval should be defined in the message metadata to avoid excessive retry requests sent to the integrated systems by the consumers. Consider having an exponential backoff based on the number of attempts
+
+- The integrated systems should support idempotence. It is possible that the same request is sent again by the consumer as systems could fail after a successful response but before it is added to the reply channel
+
 # Coming Next
 - Leader Election Pattern
