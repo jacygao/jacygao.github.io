@@ -13,7 +13,7 @@
 <meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
 <meta name=author content="Jacy Gao"><meta name=description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
 Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction."><meta name=keywords content="Hugo,blog,tech,architecture,engineering,leadership,Golang">
-<meta name=generator content="Hugo 0.90.1 with theme even">
+<meta name=generator content="Hugo 0.91.0 with theme even">
 <link rel=canonical href=http://jgao.io/post/patterns_of_distributed_transation/>
 <link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
@@ -33,8 +33,8 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 <meta itemprop=description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
 Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction."><meta itemprop=datePublished content="2021-12-12T15:13:17+11:00">
 <meta itemprop=dateModified content="2021-12-12T15:13:17+11:00">
-<meta itemprop=wordCount content="1798">
-<meta itemprop=keywords content="distributed-transaction,transaction-outbox,event-sourcing,saga,leader-election,raft,"><meta name=twitter:card content="summary">
+<meta itemprop=wordCount content="1786">
+<meta itemprop=keywords content="distributed-transaction,transaction-outbox,event-sourcing,saga,reliability-queue,competing-consumers,leader-election,raft,"><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Patterns of Distributed Transaction">
 <meta name=twitter:description content="A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
 Two-Phase Commit Protocol (2PC) In such transaction processing across multiple nodes, a Two-Phase Commit Protocol is sometimes implemented to coordinate all participated processes in a distributed transaction on whether to commit or abort and roll back the transaction."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
@@ -99,7 +99,7 @@ Two-Phase Commit Protocol (2PC) In such transaction processing across multiple n
 <a href=/categories/architecture/> Architecture </a>
 <a href=/categories/distributed-computing/> Distributed-Computing </a>
 </div>
-<span class=more-meta> 1798 words </span>
+<span class=more-meta> 1786 words </span>
 <span class=more-meta> 9 mins read </span>
 </div>
 </header>
@@ -158,7 +158,7 @@ In this phase, the coordinator node sends a commit command to all participated n
 </li>
 </ul>
 <h2 id=the-cap-theorem>The CAP Theorem</h2>
-<p>As there is no perfect system. As software engineer, one of the most important jobs is to make right trade-offs. The CAP theorem states that any distributed data store can only provide two of the following three guarantees:</p>
+<p>There is no perfect system. The CAP theorem states that any distributed data store can only provide two of the following three guarantees:</p>
 <ul>
 <li>
 <p>Consistency, every read receives the latest state of data</p>
@@ -253,7 +253,7 @@ In this phase, the coordinator node sends a commit command to all participated n
 <p>Message retry interval needs to be well managed to avoid excessive retry requests sent to the integrated systems by the consumers. Consider implementing an exponential backoff based on the number of attempts</p>
 </li>
 <li>
-<p>The integrated systems should support idempotence. It is possible that the same request is sent more than once by the consumer as systems could fail after a successful response but before it is added to the reply channel</p>
+<p>The integrated systems should support idempotence. It is possible that the same request is sent more than once by the consumer. For example, a consumer could fail after a successful response but before the message is added to the reply channel</p>
 </li>
 </ul>
 <h1 id=coming-next>Coming Next</h1>
@@ -279,6 +279,8 @@ In this phase, the coordinator node sends a commit command to all participated n
 <a href=/tags/transaction-outbox/>transaction-outbox</a>
 <a href=/tags/event-sourcing/>event-sourcing</a>
 <a href=/tags/saga/>saga</a>
+<a href=/tags/reliability-queue/>reliability-queue</a>
+<a href=/tags/competing-consumers/>competing-consumers</a>
 <a href=/tags/leader-election/>leader-election</a>
 <a href=/tags/raft/>raft</a>
 </div>
