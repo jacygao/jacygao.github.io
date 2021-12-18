@@ -2,7 +2,7 @@
 title: "Patterns of Distributed Transaction"
 date: 2021-12-12T15:13:17+11:00
 draft: false
-tags: ["distributed-transaction", "transaction-outbox", "event-sourcing", "saga", "leader-election", "raft"]
+tags: ["distributed-transaction", "transaction-outbox", "event-sourcing", "saga", "reliability-queue", "competing-consumers", "leader-election", "raft"]
 categories: ["Architecture", "Distributed-Computing"] 
 author: "Jacy Gao"
 ---
@@ -33,7 +33,7 @@ In this phase, the coordinator node sends a commit command to all participated n
 
 ## The CAP Theorem
 
-As there is no perfect system. As software engineer, one of the most important jobs is to make right trade-offs. The CAP theorem states that any distributed data store can only provide two of the following three guarantees:
+There is no perfect system. The CAP theorem states that any distributed data store can only provide two of the following three guarantees:
 
 - Consistency, every read receives the latest state of data
 
@@ -155,7 +155,7 @@ There are a few things to watch out for when using this pattern:
 
 - Message retry interval needs to be well managed to avoid excessive retry requests sent to the integrated systems by the consumers. Consider implementing an exponential backoff based on the number of attempts
 
-- The integrated systems should support idempotence. It is possible that the same request is sent more than once by the consumer as systems could fail after a successful response but before it is added to the reply channel
+- The integrated systems should support idempotence. It is possible that the same request is sent more than once by the consumer. For example, a consumer could fail after a successful response but before the message is added to the reply channel
 
 # Coming Next
 - Leader Election Pattern
