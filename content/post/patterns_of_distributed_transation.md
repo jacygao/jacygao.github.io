@@ -1,5 +1,5 @@
 ---
-title: "Patterns of Distributed Transaction"
+title: "Consistency Patterns of Distributed Transaction"
 date: 2021-12-12T15:13:17+11:00
 draft: false
 tags: ["distributed-transaction", "transaction-outbox", "event-sourcing", "saga", "reliability-queue", "competing-consumers", "leader-election", "raft"]
