@@ -156,3 +156,17 @@ There are a few things to watch out for when using this pattern:
 - Message retry interval needs to be well managed to avoid excessive retry requests sent to the integrated systems by the consumers. Consider implementing an exponential backoff based on the number of attempts
 
 - The integrated systems should support idempotence. It is possible that the same request is sent more than once by the consumer. For example, a consumer could fail after a successful response but before the message is added to the reply channel
+
+# TL, DR
+
+- 2 Phase Commit provides strong consistency and weak availability in distributed transaction. Participants will block between the Prepare and the Commit or Rollback phase.
+
+- Eventual Consistency is commonly used in distributed computing which provide a way to gain some level of consistency while maintaining high availability
+
+- The Outbox Pattern provides a way to reliably/atomically update the database and publish messages or events
+
+- The Event Sourcing Pattern provides a way to reliably update the state of an entity while keeping the change event in a persistent data store
+
+- The Saga Pattern provides a way to process a workflow of business transactions span multiple services or systems consistently
+
+- The Reliability Queue Pattern provides a way to ensure a series of transactions are processed reliably
