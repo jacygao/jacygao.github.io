@@ -13,7 +13,7 @@
 <meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
 <meta name=author content="Jacy Gao"><meta name=description content="Event Sourcing defines a different way to represent state of the data in a domain. Instead of maintaining the latest state of a single domain object in the database (CRUD), Event Sourcing promotes storing a full history of event logs which can be played sequentially to construct the current or past state of a domain object.
 I started working with Event Sourcing over 5 years ago. Many lessons were learned along the journey."><meta name=keywords content="Hugo,blog,tech,architecture,engineering,leadership,Golang">
-<meta name=generator content="Hugo 0.91.2 with theme even">
+<meta name=generator content="Hugo 0.92.1 with theme even">
 <link rel=canonical href=http://jgao.io/post/event-sourcing/>
 <link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
@@ -33,7 +33,7 @@ I started working with Event Sourcing over 5 years ago. Many lessons were learne
 <meta itemprop=description content="Event Sourcing defines a different way to represent state of the data in a domain. Instead of maintaining the latest state of a single domain object in the database (CRUD), Event Sourcing promotes storing a full history of event logs which can be played sequentially to construct the current or past state of a domain object.
 I started working with Event Sourcing over 5 years ago. Many lessons were learned along the journey."><meta itemprop=datePublished content="2021-08-29T23:20:45+10:00">
 <meta itemprop=dateModified content="2021-08-29T23:20:45+10:00">
-<meta itemprop=wordCount content="1612">
+<meta itemprop=wordCount content="1611">
 <meta itemprop=keywords content="event-sourcing,"><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Common Pitfalls of Event Sourcing">
 <meta name=twitter:description content="Event Sourcing defines a different way to represent state of the data in a domain. Instead of maintaining the latest state of a single domain object in the database (CRUD), Event Sourcing promotes storing a full history of event logs which can be played sequentially to construct the current or past state of a domain object.
@@ -100,7 +100,7 @@ I started working with Event Sourcing over 5 years ago. Many lessons were learne
 <a href=/categories/events/> Events </a>
 <a href=/categories/ddd/> DDD </a>
 </div>
-<span class=more-meta> 1612 words </span>
+<span class=more-meta> 1611 words </span>
 <span class=more-meta> 8 mins read </span>
 </div>
 </header>
@@ -136,7 +136,7 @@ I started working with Event Sourcing over 5 years ago. Many lessons were learne
 4928341   565789   $5280     01-09-2021
 </code></pre></td></tr></table>
 </div>
-</div><p>When an event occurs such as a withdrawing $100 from this bank account, a CRUD system can perform and UPDATE operation:</p>
+</div><p>When an event occurs such as a withdraw of $100 from this bank account, a CRUD system can perform an UPDATE operation:</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
 <pre tabindex=0 class=chroma><code><span class=lnt>1
@@ -149,7 +149,7 @@ SET Balance = Balance - 100
 WHERE Account = 4928341
 </code></pre></td></tr></table>
 </div>
-</div><p>With CRUD model, there isn&rsquo;t any event history recorded as part of the change by default. Therefore an additional event log is usually created and stored in a different database table which should also be committed in the same transaction.</p>
+</div><p>With the CRUD model, there isn&rsquo;t any event history recorded as part of the change by default. Therefore an additional event log is usually created and stored in a different database table which should also be committed in the same transaction.</p>
 <p>Event Sourcing, on the other hand, stores a full series of actions taken on that domain object, as per example below:</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
@@ -202,9 +202,9 @@ WHERE Account = 4928341
 <p>Firstly, the processes of user creation and cart creation should be transactional. In case of any failure either caused by unstable network or data errors, User service is responsible for managing rollback of the newly created user. This adds complexity.</p>
 <p>Secondly, both User service and Order service must be available for the request to be successful. This cannot be guaranteed when 2 services are maintained by seperate teams.</p>
 <p>Thirdly, more than one service may be instereted in the User Created event. This adds additional responsibility to the User service to ensure all downstream services can successfully process the request at the same time.</p>
-<p>Event Driven Architecture allows requests to be queued until downstream services become available. This means that downstreams services now are responsible for processing the request. These services don&rsquo;t need to be available when user creation request is initiated. Furthermore, using an event stream such as Kafka enables PubSub messaging mechanism which allows many consumers react to the same event.</p>
+<p>Event Driven Architecture allows requests to be queued until downstream services become available. This means that downstream services now are responsible for processing the request. These services don&rsquo;t need to be available when user creation request is initiated. Furthermore, using an event stream such as Kafka enables PubSub messaging mechanism which allows many consumers react to the same event.</p>
 <p><img src=https://jgao.io/event-driven-example.png alt="Event Driven Architecture"></p>
-<p>All events published to the event stream can be captured and stored centrally in an Event Store. Some event streaming platforms provides an event store out of the box with additional cost. All events can be retrieved later for analytical or auditing purpose.</p>
+<p>All events published to the event stream can be captured and stored centrally in an Event Store. Some event streaming platforms provides an event store out of the box. All events can be retrieved later for analytical or auditing purpose.</p>
 <p>However, this event store should not be used for Event Sourcing.</p>
 <p>Event sourcing is a more domain specific pattern. It does not care about any other domains and it does not require an event stream. It&rsquo;s sole purpose is to store its domain state as a sequence of events.These events are stored to record state changes rather than communicating.</p>
 <p>Consider the following example of Event Sourcing:</p>
