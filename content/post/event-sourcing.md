@@ -23,7 +23,7 @@ Account   BSB      Balance   Date
 4928341   565789   $5280     01-09-2021
 ```
 
-When an event occurs such as a withdrawing $100 from this bank account, a CRUD system can perform and UPDATE operation:
+When an event occurs such as a withdraw of $100 from this bank account, a CRUD system can perform an UPDATE operation:
 
 ```
 UPDATE account 
@@ -31,7 +31,7 @@ SET Balance = Balance - 100
 WHERE Account = 4928341
 ```
 
-With CRUD model, there isn't any event history recorded as part of the change by default. Therefore an additional event log is usually created and stored in a different database table which should also be committed in the same transaction.
+With the CRUD model, there isn't any event history recorded as part of the change by default. Therefore an additional event log is usually created and stored in a different database table which should also be committed in the same transaction.
 
 Event Sourcing, on the other hand, stores a full series of actions taken on that domain object, as per example below:
 
@@ -81,11 +81,11 @@ Secondly, both User service and Order service must be available for the request 
 
 Thirdly, more than one service may be instereted in the User Created event. This adds additional responsibility to the User service to ensure all downstream services can successfully process the request at the same time.
 
-Event Driven Architecture allows requests to be queued until downstream services become available. This means that downstreams services now are responsible for processing the request. These services don't need to be available when user creation request is initiated. Furthermore, using an event stream such as Kafka enables PubSub messaging mechanism which allows many consumers react to the same event.
+Event Driven Architecture allows requests to be queued until downstream services become available. This means that downstream services now are responsible for processing the request. These services don't need to be available when user creation request is initiated. Furthermore, using an event stream such as Kafka enables PubSub messaging mechanism which allows many consumers react to the same event.
 
 ![Event Driven Architecture](https://jgao.io/event-driven-example.png)
 
-All events published to the event stream can be captured and stored centrally in an Event Store. Some event streaming platforms provides an event store out of the box with additional cost. All events can be retrieved later for analytical or auditing purpose.
+All events published to the event stream can be captured and stored centrally in an Event Store. Some event streaming platforms provides an event store out of the box. All events can be retrieved later for analytical or auditing purpose.
 
 However, this event store should not be used for Event Sourcing.
 
