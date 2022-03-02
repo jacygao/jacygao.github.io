@@ -7,7 +7,7 @@ categories: ["Architecture", "Distributed-Computing"]
 author: "Jacy Gao"
 ---
 
-A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In the case, SQL Transaction which is supported on a single node is no longer sufficient.
+A distributed transaction is a set of operations on data that is performed across two or more data repositories. Consider 2 UPDATE SQL operations need to be performed across 2 separate databases where both operations need to be either successful or failed. In this case, SQL Transaction which is supported on a single node is no longer sufficient.
 
 # Two-Phase Commit Protocol (2PC)
 
@@ -23,7 +23,7 @@ In this phase, the coordinator node sends a commit command to all participated n
 
 ![2pc example](https://jgao.io/2pc-example.png)
 
-2PC is a strongly consistent protocol with trade in availability. During the 2PC stage, data records from all participants must be locked to prevent conflicts from concurrent writes. This trade-off introduces several issues:
+2PC is a strongly consistent protocol with a trade-off in availability. During the 2PC stage, data records from all participants must be locked to prevent conflicts from concurrent writes. This trade-off introduces several issues:
 
 - Some failures can result in deadlock leading to some participants never being able to resolve their transactions
 
