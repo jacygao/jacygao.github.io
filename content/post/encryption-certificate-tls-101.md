@@ -23,30 +23,42 @@ The plugboard and the rotors are just like the key and algorithm of digital encr
     Decrypt(string key, string cipertext) string text
 ```
 
-# Encryption Keys
+## Encryption Keys
 
 There are two kinds of encryption keys:
 
 - Symetric Keys
 
-- Asymetric keys
+- Asymetric key
 
-With Symetric key, both encryption and decryption processes using the same key. This is sometimes defined as a secret or session key.
+With Symetric key, both encryption and decryption processes using the same key. Symetric keys are commonly used for encryption at rest.
 
 With Asymetric key, two separate keys are used for encryption and decryption. One common example is the private and public keys used for TLS. The two keys have to be used in pairs. Both keys can be used as the encryption key or decryption key. One can decrypt messages encrypted by the other key.
 
 ## Encryption Algorithms
 
-- Examples of using encryption
+Popular encryption algorithms include RSA
 
 # Certificate
 
-- Server Certifcate
+A certificate can be issued to a user, an application or a website. The issuer of certificates is called a Certificate Authority(CA). There are a number of public certificate authorities who can issue certificate trusted by most browsers and operating systems such as [IdenTrust](https://en.wikipedia.org/wiki/IdenTrust) and [DigiCert](https://en.wikipedia.org/wiki/DigiCert).
 
-- Client Certificate
+## Server Certificate
 
-- Certificate Signiture
+Server certificates are issued by trusted CAs and used to validate the identity of a server and encrypt data in transit. 
 
-- Chain of Trust
+Once a server certificate is installed on a website, it turns the protocol from http to https. During the TLS Handshake stage, server certificate is also used for encryption and protect content transferred over the internet.
 
-- TLS Handshake (server and client)
+## Client Certificate
+
+Client Certificates are issued by a trusted CA and used to validate the identity of a client. Differently from Server Certificates, Client Certificates do not encrypt any data.
+
+## Self Signed Certificate
+
+## Signing
+
+## Chain of Trust
+
+# TLS/SSL
+
+## TLS Handshake (server and client)
