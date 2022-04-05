@@ -39,9 +39,35 @@ With Asymetric key, two separate keys are used for encryption and decryption. On
 
 Popular encryption algorithms include RSA
 
-# Certificate
+# Digital Certificate
 
-A certificate can be issued to a user, an application or a website. The issuer of certificates is called a Certificate Authority(CA). There are a number of public certificate authorities who can issue certificate trusted by most browsers and operating systems such as [IdenTrust](https://en.wikipedia.org/wiki/IdenTrust) and [DigiCert](https://en.wikipedia.org/wiki/DigiCert).
+A Digital Certificate is a file that proves the autheticity of a server, device or user. A certificate file contains the following main components:
+
+- Digital Siginiture of the Certificate Authority(CA)
+- Certificate owner's Public Key 
+- Expiry Dates
+- Name of certificate holder
+- Serial number
+
+## Certificate Authority(CA)
+
+Certficate Authoritis are entities that issue certificates. CA acts as the trusted third party between the owner of the certificate and the party relying upon on the certificate. 
+
+There are a number of public CAs like [IdenTrust](https://en.wikipedia.org/wiki/IdenTrust) and [DigiCert](https://en.wikipedia.org/wiki/DigiCert) who can issue certificate trusted by most browsers and operating systems in public channels.
+
+An organisaction can also creates its own Certificate Authority to issue digital certificates used within the organisation's IT environment.
+
+There are two kinds of digital certificates:
+- Server Certificate
+- Client Certificate
+
+
+
+A digital certificate 
+
+can be issued to a user, an application or a website. The issuer of certificates is called a Certificate Authority(CA). There are a number of public certificate authorities who can issue certificate trusted by most browsers and operating systems such as [IdenTrust](https://en.wikipedia.org/wiki/IdenTrust) and [DigiCert](https://en.wikipedia.org/wiki/DigiCert).
+
+Certificates are stored in Public Key Infrastructure(PKI)
 
 ## Server Certificate
 
@@ -52,6 +78,8 @@ Once a server certificate is installed on a website, it turns the protocol from 
 ## Client Certificate
 
 Client Certificates are issued by a trusted CA and used to validate the identity of a client. Differently from Server Certificates, Client Certificates do not encrypt any data.
+
+Client Certificates are like 
 
 ## Self Signed Certificate
 
