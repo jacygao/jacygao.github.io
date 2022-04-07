@@ -53,35 +53,19 @@ A Digital Certificate is a file that proves the autheticity of a server, device 
 
 Certficate Authoritis are entities that issue certificates. CA acts as the trusted third party between the owner of the certificate and the party relying upon on the certificate. 
 
-There are a number of public CAs like [IdenTrust](https://en.wikipedia.org/wiki/IdenTrust) and [DigiCert](https://en.wikipedia.org/wiki/DigiCert) who can issue certificate trusted by most browsers and operating systems in public channels.
+A Certificate Authority can be public or private. Public CAs such as [IdenTrust](https://en.wikipedia.org/wiki/IdenTrust) and [DigiCert](https://en.wikipedia.org/wiki/DigiCert) can issue certificate trusted by most browsers and operating systems used in public channels such as a web server. An organisaction can also creates its own private CA to issue digital certificates used within the organisation's IT environment.
 
-An organisaction can also creates its own Certificate Authority to issue digital certificates used within the organisation's IT environment.
+## Server Certificate vs Client Certificate
 
-There are two kinds of digital certificates:
-- Server Certificate
-- Client Certificate
+There are two kinds of digital certificates, Server Certificate and Client Certificate. Both certificates are issues by a trusted CA.
 
+A server certificate is used to validate the identity of a server. For example, a valid server certificate can prove that you are a legit owner of the webserver and ensure data sent to and received from your web service is encrypted. This encryption process is called TLS Handshake. It is also known as Data encryption in transit.
 
-
-A digital certificate 
-
-can be issued to a user, an application or a website. The issuer of certificates is called a Certificate Authority(CA). There are a number of public certificate authorities who can issue certificate trusted by most browsers and operating systems such as [IdenTrust](https://en.wikipedia.org/wiki/IdenTrust) and [DigiCert](https://en.wikipedia.org/wiki/DigiCert).
-
-Certificates are stored in Public Key Infrastructure(PKI)
-
-## Server Certificate
-
-Server certificates are issued by trusted CAs and used to validate the identity of a server and encrypt data in transit. 
-
-Once a server certificate is installed on a website, it turns the protocol from http to https. During the TLS Handshake stage, server certificate is also used for encryption and protect content transferred over the internet.
-
-## Client Certificate
-
-Client Certificates are issued by a trusted CA and used to validate the identity of a client. Differently from Server Certificates, Client Certificates do not encrypt any data.
-
-Client Certificates are like 
+A client certificate is used to validate the identity of a client. Differently from Server Certificates, Client Certificates do not encrypt any data. It is usually used as a replacement of a simple auth (username and password). When a client tries to connect to a server with a client certificate
 
 ## Self Signed Certificate
+
+## Certificate Storage
 
 ## Signing
 
