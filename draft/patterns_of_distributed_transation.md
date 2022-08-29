@@ -42,6 +42,7 @@ This means that in a distributed transaction where requests sent to multiple nod
 
 ## Eventual Consistency
 
+Eventual Consistency essentially ensures data in distributed systems is eventually consistent. This means that reads are not guarenteed to return the latest state immediately after a write operation has happened.
 
 2PC is a CP protocol. It provides strong consistency allowing data modified across multiple nodes but cannot guarantee the availability of the data. Although 2PC is a general pattern to solve distributed transaction problems, there are other alternative patterns which may fit what you need for your software solution.
 
