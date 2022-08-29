@@ -1,4 +1,4 @@
-baseURL = "http://localhost:1313/"
+baseURL = "http://jgao.io/"
 languageCode = "en"
 defaultContentLanguage = "en"                             # en / zh-cn / ... (This field determines which i18n file to use)
 title = "Jacy Gao"
@@ -144,10 +144,10 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
     repo = ""               # The repo to store comments
 
   [params.gitalk]           # Gitalk is a comment system based on GitHub issues. see https://github.com/gitalk/gitalk
-    owner = ""              # Your GitHub ID
-    repo = ""               # The repo to store comments
-    clientId = ""           # Your client ID
-    clientSecret = ""       # Your client secret
+    owner = "jacygao"              # Your GitHub ID
+    repo = "jacygao.github.io"               # The repo to store comments
+    clientId = "89ea4f44b828efc1f114"           # Your client ID
+    clientSecret = "2b3c6fec7fc4ffea74da02548b6806227b9be52e"       # Your client secret
 
   # Valine.
   # You can get your appid and appkey from https://leancloud.cn
